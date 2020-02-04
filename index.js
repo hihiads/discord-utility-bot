@@ -1,6 +1,8 @@
+
+const env = process.env.NODE_ENV || 'development';
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const auth = require('./auth.json');
+const auth = {"token": "${process.env.DISCORD_TOKEN}"};
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
