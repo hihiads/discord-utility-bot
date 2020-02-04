@@ -6,7 +6,7 @@ client.on('ready', () => {
 });
 
 client.on('message', msg => {
-	bad_words = ["fuck", "shit", "pussies", "pussy", "dick", "asshole"];
+	bad_words = ["fuck"];
 
 	flagged_words = [];
 
