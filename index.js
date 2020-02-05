@@ -12,7 +12,7 @@ client.on('message', msg => {
 		//msg.channel.send("pong Mo Gains!"); // Call .send() on the channel object the message was sent in
 		
 		msg.author.send('hi!')
-		.then(msg => msg.channel.awaitMessages(msg => msg.content.match(/.+/g),{max: 1})
+		.then(msg => msg.channel.awaitMessages(msg => msg.content.match(/.+/g),{max: 1, time: 5000})
 		.then(collected => 
 			collected.map((response) => 
 				response.author.send('hi you said: ' + response.content))
@@ -46,7 +46,5 @@ client.on('message', msg => {
 });
 
 client.login(process.env.DISCORD_TOKEN);
-
-
 
 
