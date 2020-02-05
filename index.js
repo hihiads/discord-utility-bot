@@ -3,6 +3,8 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
+
+
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 });
@@ -10,15 +12,36 @@ client.on('ready', () => {
 client.on('message', msg => {
 	if(msg.content == "!ping"){ // Check if content of message is "!ping"
 		//msg.channel.send("pong Mo Gains!"); // Call .send() on the channel object the message was sent in
+		msg.author.send('How many stars would you give your coach? (Enter a number from 1 to 5)')
 		
-		msg.author.send('hi!')
-		.then(msg => msg.channel.awaitMessages(msg => msg.content.match(/.+/g),{max: 1})
-		.then(collected => 
-			collected.map((response) => 
-				response.author.send('hi you said: ' + response.content))
-		));
-		
+		const collector = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { max: 10, maxMatches: 10 });
+		collector.next.then(collec => {
+		    // console.log(collec);
+		});
+		collector.on('collect', (el, c) => {
+		    msg.channel.send('Found message.');
+		    console.log(el);
+		    // console.log(c);
+		    collector.stop();
+		});
+		collector.on('end', (c, r) => {
+		    // console.log('c');
+		    msg.channel.send("End Emitted!");
+		});
+		// .then( msg =>
+		// 	msg.channel.awaitMessages(msg => msg.content.match(/[1-5]/g), {max:1}).then(response => console.log(response))
+		// )
+
+
+		// .then(msg => msg.channel.awaitMessages(msg => msg.content.match(/[1-5]/g))
+		// .then(collected => collected.next((response) => console.log(response))))
 	}
+
+	// if(parseInt(msg.content) > 0 || parseInt(msg.content) < 11){
+	// 	msg.author.send("Got it. Finally please leave a short review")
+	// 	.then(msg => msg.channel.awaitMessages(msg => msg.content.match(/.+/g),{max: 1})
+	// 	.then(collected => collected.map((response) => console.log(response))));
+	// }
 	// a coach is finish working with a student and wants to allow
 	// the student to leave a review
 	// the coach has permission to call the bot using !review me followed
@@ -45,6 +68,7 @@ client.on('message', msg => {
 	//!review help will give a short documentation of all commands
 });
 
-client.login(process.env.DISCORD_TOKEN);
 
+
+client.login(process.env.DISCORD_TOKEN);
 
