@@ -16,6 +16,7 @@ client.on('message', msg => {
 		
 		const collector = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { max: 10, maxMatches: 10 });
 		collector.next.then(collec => {
+			
 		    // console.log(collec);
 		});
 		collector.on('collect', (el, c) => {
