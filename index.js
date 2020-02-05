@@ -19,7 +19,7 @@ client.on('message', msg => {
 		    // console.log(collec);
 		});
 		collector.on('collect', (el, c) => {
-		    msg.channel.send('Found message.');
+		    msg.channel.send('Found message: ' + el.content);
 		    console.log(el);
 		    // console.log(c);
 		    collector.stop();
