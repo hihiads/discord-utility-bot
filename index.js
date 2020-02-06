@@ -5,75 +5,87 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
+let content;
 
-// these async functions will run inside of get_summoned in order
-// and return results we can work with later for logging
-const getReady = () => new Promise((resolve, reject) => {
-  client.on( 'ready', msg => resolve( 'bot ready and waiting!' ) );
+let user;
+let username;
+
+let botName;
+
+let messageObj;
+let sentMessage;
+
+let dmChannel;
+
+
+
+
+const getMessage = (msgObj) => new Promise((resolve, reject) => {
+	const content = msgObj.content
+	if (content !== '!review') return;
+	resolve(msgObj);
 });
 
-const getMessage = () => new Promise((resolve, reject) => {
-  client.on( 'message', msg => resolve( {msg: msg, log: 'captured a message!'} ) );
+
+
+
+const sendMessage = (msgObj) => new Promise((resolve, reject) => {
+	user = msgObj.author;
+	botName = client.user.username;
+
+	if (user.username === botName){
+		console.log('not responding to my own message!');
+		return
+	}
+
+
+	//user.send('hello');
+	resolve(user.send('hello'));
 });
 
-const checkIfSummoned = (message) => new Promise((resolve, reject) => {
-  let words = message.content.split( " " );
-  if ( words[0] === '!review' ) { 
-  	resolve( "i've been summoned!" );
-  }
-  else {
-  	reject( "I have not been summoned!" );
-  }
+
+
+
+const collectScore = (sentMsgObj) => new Promise((resolve, reject) => {
+	const filter = m => m.content.startsWith('5');
+	dmChannel = sentMsgObj.channel;
+
+	resolve(
+		dmChannel.awaitMessages(filter, { max: 1, time: 10000, errors: ['time'] })
+		.then(collected => collected)
+		.catch(collected => console.log('time is up!'))
+	);
 });
 
-const getStudentID =  (message) => new Promise((resolve, reject) => {
-	let studentID = message.content;
-	studentID = studentID.split(" ");
-	studentID = studentID[2];
-	studentID = studentID.substring(3, studentID.length-1);
-	resolve({id: studentID, log: 'student ID found!'});
-});
-
-const getStudent = (studentID) => new Promise((resolve, reject) => {
-	resolve( client.fetchUser(studentID.id) );
-})
-
-const startReview =  (message, student) => new Promise((resolve, reject) => {
-	let msg = 'Hi! Did you have a good session with your coach?';
-	msg = msg + ' Please enter a score from 1 - 10 (10 being the best)';
-	resolve(student.send(msg));
-});
-
-const listenForReviewScore = (message) => new Promise((resolve, reject) => {
-	const response = message.channel.awaitMessages(() => true, {max: 1})
-	resolve( response );
-});
-
-// this is where everything runs at the intended time
-const getSummoned = async () => {
-	const ready = await getReady();
-	const message = await getMessage();
-	const summoned = await checkIfSummoned(message.msg);
-	const studentID = await getStudentID(message.msg);
-	const student = await getStudent(studentID);
-	const dmMessage = await startReview(message.msg, student);
-	const reviewScore = await listenForReviewScore(dmMessage);
-
-	return [ready, message.log, summoned, studentID.log, reviewScore.first()];
-};
 
 
-getSummoned()
-.then( ( response ) => { 
-	console.log( 'then: ' + response );
-} )
-.catch( ( error ) => { 
-	console.log( 'WHOOPS ERROR: ' + error );
-} )
-.finally( ( data ) => { 
-	console.log( 'bot finally out!' );
-} );
+
+const main = async (msgObj) => {
+
+	messageObj = await getMessage(msgObj);
+	sentMessage = await sendMessage(msgObj);
+
+	scoreCollected = await collectScore(sentMessage);
+
+	return [messageObj, sentMessage, scoreCollected];
+
+}
 
 
-// login
 client.login(process.env.DISCORD_TOKEN);
+
+client.on( 'ready', msg => console.log('bot connected'));
+client.on( 'message', msg => {
+
+	main(msg)
+	.then( (response) => { 
+		console.log( response );
+	} )
+	.catch( ( error ) => { 
+		console.log( 'WHOOPS ERROR: ' + error );
+	} )
+	.finally( ( data ) => { 
+		console.log( 'bot finally out!' );
+	} );
+
+});
