@@ -1,75 +1,79 @@
 // use nodemon index.js for local development for auto file reload
 
+// assign the bot and discord classes
+
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
 
-
-client.on('ready', () => {
-    console.log(`Logged in as ${client.user.tag}!`);
+// these async functions will run inside of get_summoned in order
+// and return results we can work with later for logging
+const getReady = () => new Promise((resolve, reject) => {
+  client.on( 'ready', msg => resolve( 'bot ready and waiting!' ) );
 });
 
-client.on('message', msg => {
-	if(msg.content == "!ping"){ // Check if content of message is "!ping"
-		//msg.channel.send("pong Mo Gains!"); // Call .send() on the channel object the message was sent in
-		msg.author.send('How many stars would you give your coach? (Enter a number from 1 to 5)')
-		
-		const collector = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { max: 10, maxMatches: 10 });
-		collector.next.then(collec => {
-			
-		    // console.log(collec);
-		});
-		collector.on('collect', (el, c) => {
-		    msg.channel.send('Found message: ' + el.content);
-		    console.log(el);
-		    // console.log(c);
-		    collector.stop();
-		});
-		collector.on('end', (c, r) => {
-		    // console.log('c');
-		    msg.channel.send("End Emitted!");
-		});
-		// .then( msg =>
-		// 	msg.channel.awaitMessages(msg => msg.content.match(/[1-5]/g), {max:1}).then(response => console.log(response))
-		// )
-
-
-		// .then(msg => msg.channel.awaitMessages(msg => msg.content.match(/[1-5]/g))
-		// .then(collected => collected.next((response) => console.log(response))))
-	}
-
-	// if(parseInt(msg.content) > 0 || parseInt(msg.content) < 11){
-	// 	msg.author.send("Got it. Finally please leave a short review")
-	// 	.then(msg => msg.channel.awaitMessages(msg => msg.content.match(/.+/g),{max: 1})
-	// 	.then(collected => collected.map((response) => console.log(response))));
-	// }
-	// a coach is finish working with a student and wants to allow
-	// the student to leave a review
-	// the coach has permission to call the bot using !review me followed
-	// by the lesson type and students discord name on the server
-
-	// the bot will then DM the student asking for a review from 1-10 (10 being the best)
-
-	// if the user input is valid the bot will then ask the student to leave a short review
-
-	// the data then gets sent to a google sheet for record keeping.
-	// the row will be coach name, student name, date of lesson, lesson type, coach score, and review
-
-	//---------------------------------------------------------------------------------------------
-	//---------------------------------------------------------------------------------------------
-
-	// when a head coach wants to see info about a coach they will call the bot with !review check
-	// followed by the coaches name
-
-	// the bot will then create a short report of the coaches avg rating, last session, and last review
-
-	// finally the head coach will call !reviewreport to get a report of all lessons logged
-	// within the current month
-
-	//!review help will give a short documentation of all commands
+const getMessage = () => new Promise((resolve, reject) => {
+  client.on( 'message', msg => resolve( {msg: msg, log: 'captured a message!'} ) );
 });
 
+const checkIfSummoned = (message) => new Promise((resolve, reject) => {
+  let words = message.content.split( " " );
+  if ( words[0] === '!review' ) { 
+  	resolve( "i've been summoned!" );
+  }
+  else {
+  	reject( "I have not been summoned!" );
+  }
+});
+
+const getStudentID =  (message) => new Promise((resolve, reject) => {
+	let studentID = message.content;
+	studentID = studentID.split(" ");
+	studentID = studentID[2];
+	studentID = studentID.substring(3, studentID.length-1);
+	resolve({id: studentID, log: 'student ID found!'});
+});
+
+const getStudent = (studentID) => new Promise((resolve, reject) => {
+	resolve( client.fetchUser(studentID.id) );
+})
+
+const startReview =  (message, student) => new Promise((resolve, reject) => {
+	let msg = 'Hi! Did you have a good session with your coach?';
+	msg = msg + ' Please enter a score from 1 - 10 (10 being the best)';
+	resolve(student.send(msg));
+});
+
+const listenForReviewScore = (message) => new Promise((resolve, reject) => {
+	const response = message.channel.awaitMessages(() => true, {max: 1})
+	resolve( response );
+});
+
+// this is where everything runs at the intended time
+const getSummoned = async () => {
+	const ready = await getReady();
+	const message = await getMessage();
+	const summoned = await checkIfSummoned(message.msg);
+	const studentID = await getStudentID(message.msg);
+	const student = await getStudent(studentID);
+	const dmMessage = await startReview(message.msg, student);
+	const reviewScore = await listenForReviewScore(dmMessage);
+
+	return [ready, message.log, summoned, studentID.log, reviewScore.first()];
+};
 
 
+getSummoned()
+.then( ( response ) => { 
+	console.log( 'then: ' + response );
+} )
+.catch( ( error ) => { 
+	console.log( 'WHOOPS ERROR: ' + error );
+} )
+.finally( ( data ) => { 
+	console.log( 'bot finally out!' );
+} );
+
+
+// login
 client.login(process.env.DISCORD_TOKEN);
-
