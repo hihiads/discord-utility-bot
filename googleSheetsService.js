@@ -13,12 +13,13 @@ async function getAuthToken() {
   return authToken;
 }
 
-async function getSpreadSheet({spreadsheetId, auth}) {
-  const res = await sheets.spreadsheets.get({
+async function getSpreadSheet({spreadsheetId, auth, sheetName}) {
+  const res = await sheets.spreadsheets.values.get({
     spreadsheetId,
     auth,
+    range: sheetName
   });
-  return res;
+  return res.data.values;
 }
 
 async function postSpreadSheetValues({spreadsheetId, auth, sheetName, values}) {

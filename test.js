@@ -13,9 +13,10 @@ async function testGetSpreadSheet() {
     const auth = await getAuthToken();
     const response = await getSpreadSheet({
       spreadsheetId,
-      auth
+      auth,
+      sheetName
     })
-    console.log('output for getSpreadSheet', JSON.stringify(response.data, null, 2));
+    console.log(response);
   } catch(error) {
     console.log(error.message, error.stack);
   }
@@ -37,11 +38,11 @@ async function testPostSpreadSheetValues() {
 }
 
 function main() {
-  //testGetSpreadSheet();
-  testPostSpreadSheetValues();
+  console.log(testGetSpreadSheet());
+  //testPostSpreadSheetValues();
 }
 
 main()
 
 // export GCLOUD_PROJECT=dfz-bots
-// export GOOGLE_APPLICATION_CREDENTIALS=./service_account_credentials.json
+// export GOOGLE_APPLICATION_CREDENTIALS=./mod.json
