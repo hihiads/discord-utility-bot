@@ -140,9 +140,7 @@ const main = async (msgObj) => {
 
 }
 
-//client.login(process.env.DISCORD_TOKEN)
-
-client.login('NjY5Njc2MDQxNDAwMzUyNzcy.Xj0COw.KHIHF425iscVnO2lvrzC3mvq8Ns')
+client.login(process.env.DISCORD_TOKEN)
 
 
 client.on( 'ready', msg => console.log('bot connected'))
