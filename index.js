@@ -42,17 +42,15 @@ const getMessage = (msgObj) => new Promise((resolve, reject) => {
 
 
 
-const sendMessage = (msgObj, botMsg) => new Promise((resolve, reject) => {
-	user = msgObj.author
+const sendMessage = (studentObj, botMsg) => new Promise((resolve, reject) => {
 	botName = client.user.username
 
-	if (user.username === botName){
+	if (studentObj.username === botName){
 		console.log('not responding to my own message!')
 		return
 	}
 
-	//user.send('hello')
-	resolve(user.send(botMsg))
+	resolve(studentObj.send(botMsg))
 })
 
 
@@ -86,27 +84,28 @@ const main = async (msgObj) => {
 	{	
 
 		// get name of coach
-		coach = messageObj.member.nickname
+		coach = messageObj.author.username
 
 		// get student user object
 		let rawID = content[2]
 		let studentID = rawID.substring(3, rawID.length-1)
 		let studentObj = await client.fetchUser(studentID)
 
-		student = studentObj.lastMessage.member.nickname
+		// student = studentObj.lastMessage.member.nickname
+		student = studentObj.username
 
 		// ask for score & collect response
-		let sentMessage = await sendMessage(msgObj, botMsgs.score)
+		let sentMessage = await sendMessage(studentObj, botMsgs.score)
 		let scoreCollectedObj = await collectScore(sentMessage)
 		let score = scoreCollectedObj.first().content
 
 		// ask for comment & collect response
-		sentMessage = await sendMessage(msgObj, botMsgs.comment)
+		sentMessage = await sendMessage(studentObj, botMsgs.comment)
 		let commentCollectedObj = await collectComment(sentMessage)
 		let comment = await commentCollectedObj.first().content
 
 		// complete the conversation
-		sentMessage = await sendMessage(msgObj, botMsgs.thanks)
+		sentMessage = await sendMessage(studentObj, botMsgs.thanks)
 		
 
 		// post to the google sheet
@@ -133,15 +132,15 @@ const main = async (msgObj) => {
 
 		let avgRating = getAvgRating(coachData)
 
-		response = await messageObj.reply( 'Average review for ' + coach + ' is ' + avgRating.toFixed(2) )
+		//response = await sendMessage( coachObj,'Average review for ' + coach + ' is ' + avgRating.toFixed(2) )
 
 		return response
 	}
 
 }
 
-client.login(process.env.DISCORD_TOKEN)
 
+client.login(process.env.DISCORD_TOKEN)
 
 client.on( 'ready', msg => console.log('bot connected'))
 client.on( 'message', msg => {
