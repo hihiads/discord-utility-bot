@@ -12,6 +12,6 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^11.5.1",
-    "googleapis": "^39.2.0"
+    "googleapis": "43.0.0"
   }
 }
