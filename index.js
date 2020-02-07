@@ -82,6 +82,7 @@ const main = async (msgObj) => {
 		let rawID = content[2]
 		let studentID = rawID.substring(3, rawID.length-1)
 		let studentObj = await client.fetchUser(studentID)
+		console.log( studentObj )
 
 		student = studentObj.lastMessage.member.nickname
 
@@ -114,8 +115,8 @@ const main = async (msgObj) => {
 
 }
 
-// client.login(process.env.DISCORD_TOKEN)
-client.login('NjY5Njc2MDQxNDAwMzUyNzcy.XjnxeA.N0IpJ0geJ2QQU2YDfOdC9DNkCOA')
+client.login(process.env.DISCORD_TOKEN)
+
 
 
 client.on( 'ready', msg => console.log('bot connected'))
