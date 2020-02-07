@@ -2,7 +2,7 @@
 
 // assign the bot and discord classes
 //const h = require('./helpers.js')
-
+const postTo = require( './postToGSheets.js' )
 const Discord = require('discord.js')
 const client = new Discord.Client()
 
@@ -31,8 +31,8 @@ const botMsgs = {score: score, comment: comment, thanks: thanks}
 
 
 const getMessage = (msgObj) => new Promise((resolve, reject) => {
-	const content = msgObj.content
-	if (content !== '!review') return
+	const content = msgObj.content.split( " " )
+	if (content[0] !== '!review') return
 	resolve(msgObj)
 })
 
@@ -71,38 +71,46 @@ const collectComment = (sentMsgObj) => new Promise((resolve, reject) => {
 })
 
 
-const main = async (msgObj) => {
-
+const main = async (msgObj, postTo) => {
 
 	// start dm review in channel with !review
 	let messageObj = await getMessage(msgObj)
+	let command = messageObj.content.split(" ")[1]
 	
-	// ask for score & collect response
-	let sentMessage = await sendMessage(msgObj, botMsgs.score)
-	let scoreCollectedObj = await collectScore(sentMessage)
-	let score = scoreCollectedObj.first().content
+	if ( command === 'me' )
+	{	
+		// ask for score & collect response
+		let sentMessage = await sendMessage(msgObj, botMsgs.score)
+		let scoreCollectedObj = await collectScore(sentMessage)
+		let score = scoreCollectedObj.first().content
 
-	// ask for comment & collect response
-	sentMessage = await sendMessage(msgObj, botMsgs.comment)
-	let commentCollectedObj = await collectComment(sentMessage)
-	let comment = await commentCollectedObj.first().content
+		// ask for comment & collect response
+		sentMessage = await sendMessage(msgObj, botMsgs.comment)
+		let commentCollectedObj = await collectComment(sentMessage)
+		let comment = await commentCollectedObj.first().content
 
-	// complete the conversation
-	sentMessage = await sendMessage(msgObj, botMsgs.thanks)
+		// complete the conversation
+		sentMessage = await sendMessage(msgObj, botMsgs.thanks)
+		
+		return { score:score, comment: comment, postTo: postTo }
+	}
 
-
-	return [score, comment]
+	if ( command === 'stats' )
+	{  
+		return 'someone called for stats'
+	}
 
 }
 
-
 client.login(process.env.DISCORD_TOKEN)
+
 client.on( 'ready', msg => console.log('bot connected'))
 client.on( 'message', msg => {
 
-	main(msg)
+	main(msg, postTo)
 	.then( (response) => { 
 		console.log( response )
+		//response.postTo.googleSheets(response)
 	} )
 	.catch( ( error ) => { 
 		console.log( 'WHOOPS ERROR: ' + error )
