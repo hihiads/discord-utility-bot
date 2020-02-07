@@ -21,7 +21,7 @@ async function getSpreadSheet({spreadsheetId, auth}) {
   return res;
 }
 
-async function postSpreadSheetValues({spreadsheetId, auth, sheetName}) {
+async function postSpreadSheetValues({spreadsheetId, auth, sheetName, values}) {
 	var request = 
 	{
 		// The ID of the spreadsheet to update.
@@ -42,7 +42,7 @@ async function postSpreadSheetValues({spreadsheetId, auth, sheetName}) {
 			  range: sheetName,
 			  majorDimension: 'ROWS',
 			  values: [
-			    ['test', 'test', 'test', 'test']
+			    values
 			  ]
 		},
 

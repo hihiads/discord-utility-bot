@@ -6,6 +6,7 @@ const {
 
 const spreadsheetId = '1uCkgD4sSi5-SBtuMQkIxa_NFCp36SJLO7b_97zf0M9A';
 const sheetName = 'reviews';
+const values = ['coach', 'student', 'score', 'comment']
 
 async function testGetSpreadSheet() {
   try {
@@ -25,8 +26,9 @@ async function testPostSpreadSheetValues() {
     const auth = await getAuthToken();
     const response = await postSpreadSheetValues({
       spreadsheetId,
+      auth,
       sheetName,
-      auth
+      values
     })
     console.log('output for postSpreadSheetValues', JSON.stringify(response.data, null, 2));
   } catch(error) {
