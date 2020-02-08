@@ -123,7 +123,7 @@ const main = async (msgObj) => {
 		let coachID = rawID.substring(3, rawID.length-1)
 		let coachObj = await client.fetchUser(coachID)
 
-		coach = coachObj.lastMessage.member.nickname
+		coach = coachObj.username
 
 		const auth = await getAuthToken();
 		const data = await getSpreadSheet({spreadsheetId, auth, sheetName})
@@ -132,7 +132,8 @@ const main = async (msgObj) => {
 
 		let avgRating = getAvgRating(coachData)
 
-		//response = await sendMessage( coachObj,'Average review for ' + coach + ' is ' + avgRating.toFixed(2) )
+		response = await messageObj.author.send( 'Average review for ' + coach + ' is ' + avgRating.toFixed(2) )
+
 
 		return response
 	}
@@ -141,6 +142,7 @@ const main = async (msgObj) => {
 
 
 client.login(process.env.DISCORD_TOKEN)
+
 
 client.on( 'ready', msg => console.log('bot connected'))
 client.on( 'message', msg => {
