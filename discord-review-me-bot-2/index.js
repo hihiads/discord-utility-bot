@@ -12,7 +12,7 @@ let { main } = require( './main.js' )
 client.on( 'message', msg => {
 	main(msg)
 	.then( (response) => { 
-		console.log('index.js then response: ' + response);
+		console.log('success! response: ' + response);
 	} )
 	.catch( ( error ) => { 
 		console.log( 'whoops: ' + error )

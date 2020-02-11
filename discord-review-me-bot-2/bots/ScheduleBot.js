@@ -1,14 +1,28 @@
-class ScheduleBot {  
-	constructor(name, command, message, msgObj){ 
-		this.name = name
-		this.command = command
-		this.message = message
-		this.msgObj = msgObj
+let Bot = require( './Bot.js' )
+
+class ScheduleBot extends Bot{  
+	constructor(request){ 
+		super( request )
+
+		this.dispatcher = {
+			'saturday': this.saturday()
+		}
+	}
+
+	saturday(){
+		return new Promise((resolve, reject) => {
+		  resolve( `it's saturday wooohoo!` )
+		})
 	}
 
 	respond(){ 
-		console.log( client )
-		return `ScheduleBot class working with command ${this.command}`
+		return new Promise((resolve, reject) => {
+		  if (this.command === undefined) {
+		  	reject( 'command was undefined in ReviewBot.js' )
+		  }
+		  console.log( `ScheduleBot class returned the method associated with the ${this.command} command` )
+		  resolve( this.dispatcher[this.command] )
+		})
 	}
 }
 

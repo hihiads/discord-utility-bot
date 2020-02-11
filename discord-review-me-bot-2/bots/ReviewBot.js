@@ -1,14 +1,26 @@
-class ReviewBot {  
-	constructor(name, command, message, msgObj){ 
-		this.name = name
-		this.command = command
-		this.message = message
-		this.msgObj = msgObj
+let Bot = require( './Bot.js' )
+
+class ReviewBot extends Bot {  
+	constructor(request){ 
+		super( request )
+
+		this.dispatcher = {
+			'me': this.getReview()
+		}
+	}
+
+	getReview(){  
+		return 'review collected!'
 	}
 
 	respond(){ 
-		console.log(this.msgObj)
-		return `ReviewBot class working with command ${this.command}`
+		return new Promise((resolve, reject) => {
+		  if (this.command === undefined) {
+		  	reject( 'command was undefined in ReviewBot.js' )
+		  }
+		  console.log( `ReviewBot class returned the method associated with the ${this.command} command` )
+		  resolve( this.dispatcher[this.command] )
+		})
 	}
 }
 

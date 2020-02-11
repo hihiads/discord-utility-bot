@@ -7,7 +7,7 @@ exports.checkIfSummoned = (msgObj) => new Promise((resolve, reject) => {
 		return
 
 	if(content[1] === undefined)
-		reject( 'helpers.js line 10 - command was undefinied' )
+		reject( 'command was undefined in helpers.js' )
 	
 	// resolve with an object - bot's name, bot's command and original message as an array
 	resolve({ 

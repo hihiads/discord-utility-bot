@@ -1,12 +1,11 @@
 let { ReviewBot } = require( './bots/ReviewBot.js' )
 let { ScheduleBot } = require( './bots/ScheduleBot.js' )
 
-exports.controller = (request) => { 
-	bot = { 
-		'review': () => new ReviewBot(request.name, request.command, request.content, request.msgObj),
-		'schedule': () => new ScheduleBot(request.name, request.command, request.content, request.msgObj)
-	}
+exports.controller = (request) => new Promise((resolve, reject) => {
+  bot = { 
+  	'review': () => new ReviewBot(request),
+  	'schedule': () => new ScheduleBot(request)
+  }
 
-	return bot[request.name]()
-
-}
+  resolve(bot[request.name]())
+})

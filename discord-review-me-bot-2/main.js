@@ -10,7 +10,7 @@ exports.main = async (msgObj) => {
 	
 	//console.log( `bot being called is ${request.name} and command is ${request.command}.\nThe original request is: ${request.message}.` )
 
-	bot = controller(request)
+	bot = await controller(request)
 
 	return bot.respond()
 }
