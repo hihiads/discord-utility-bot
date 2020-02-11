@@ -45,4 +45,4 @@ function main() {
 main()
 
 // export GCLOUD_PROJECT=dfz-bots
-// export GOOGLE_APPLICATION_CREDENTIALS=./mod.json
+// export GOOGLE_APPLICATION_CREDENTIALS=./gCreds.json
