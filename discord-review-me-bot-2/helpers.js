@@ -1,27 +1,47 @@
-exports.createGoogleCert = function(){
-	const fs = require('fs');
-	 
-	if (fs.existsSync('./gCreds.json'))
-	{
+const hasPermission = (msgObj, role) => new Promise((resolve, reject) => {
+
+	let roles = Array.from(msgObj.guild.roles)
+	
+	let guildRoles = [];
+
+	for (var i = 0; i < roles.length; i++) {
+		temp = {};
+		temp.id = roles[i][0]
+		temp.name = roles[i][1].name
+		guildRoles.push(temp)
+	}
+
+	let hasRole = false
+
+	coachID = guildRoles.filter( r =>  r.name === role)[0].id
+
+	if(msgObj.member.roles.has(coachID)) {
+	  hasRole = true
+	}
+
+	const content = msgObj.content.split( " " )
+	
+	if ( hasRole === false ){
+		msgObj.reply( 'Sorry this bot is for coaches only!' )
+		resolve(false)
+	}
+	resolve(msgObj)
+})
+
+
+
+const sendMessage = (user, botMsg) => new Promise((resolve, reject) => {
+	botName = global.client.user.username
+
+	if (user.username === botName){
+		console.log('not responding to my own message!')
 		return
 	}
-	// json data
-	var jsonData = process.env.gJSON
-	 
-	// parse json
-	var jsonObj = JSON.parse(jsonData);
-	console.log('gcreds obj successfully created');
-	 
-	// stringify JSON Object
-	var jsonContent = JSON.stringify(jsonObj);
-	console.log('gcreds content successfully created');
-	 
-	fs.writeFile("./gCreds.json", jsonContent, 'utf8', function (err) {
-	    if (err) {
-	        console.log("An error occured while writing JSON Object to File.");
-	        return console.log(err);
-	    }
-	 
-	    console.log("JSON file has been saved.");
-	});
-}
+
+	resolve(user.send(botMsg))
+})
+
+
+
+
+module.exports = {hasPermission, sendMessage}
