@@ -33,18 +33,19 @@ client.login(DISCORD_TOKEN)
 client.on( 'ready', msg => console.log( 'bot connected' ))
 
 // our main method is where the bot classes run all commands based on the message received
-let { main } = require( './main.js' )
+let { summonBot } = require( './summonBot.js' )
 
 // run main() when new messages detected on the server
 client.on( 'message', msg => {
-	main(msg)
+	// check if we're being summoned and return the correct bot
+	summonBot(msg)
 	.then( (response) => { 
-		console.log(response);
+		console.log(response)
 	} )
 	.catch( ( error ) => { 
 		console.log( 'whoops: ' + error )
 	} )
 	.finally( ( data ) => { 
-		console.log( 'bot finally out!' )
+		console.log( 'bot finally out!')
 	} )
 })
