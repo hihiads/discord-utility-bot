@@ -68,13 +68,29 @@ const me = async (request) => {
 	const auth = await getAuthToken();
 	response = await postSpreadSheetValues({spreadsheetId, auth, sheetName, values})
 
-	return response	
+	return `${values} added to google spreadsheet!`	
 
 }
 
 const stats = async (request) => {
-	let test = await 'stats command was called!'
-	return test
+	// get coach nickname
+	let rawID = request.message[2]
+	let coachID = rawID.substring(3, rawID.length-1)
+	let coachObj = await client.fetchUser(coachID)
+
+	coach = coachObj.username
+
+	const auth = await getAuthToken();
+	const data = await getSpreadSheet({spreadsheetId, auth, sheetName})
+
+	let coachData = getCoachRows(data, coach)
+
+	let avgRating = getAvgRating(coachData)
+
+	response = await request.msgObj.author.send( 'Average review for ' + coach + ' is ' + avgRating.toFixed(2) )
+
+
+	return `rating sent to ${request.msgObj.author.username}`
 }
 
 
@@ -99,6 +115,22 @@ const getComment = (sentMsgObj) => new Promise((resolve, reject) => {
 
 	resolve(dmChannel.awaitMessages(filter, { max: 1 }))
 })
+
+
+function getCoachRows(data, coach) {
+	data = Array.from(data)
+	return(data.filter( data => data[0] === coach ))
+}
+
+
+function getAvgRating(coachData) {
+	let scores = [];
+	for (var i = 0; i < coachData.length; i++) {
+		let score = coachData[i][2]
+		scores.push( parseInt(score) )
+	}
+	return scores.reduce( (total, sum) => total + sum) / scores.length
+}
 
 
 module.exports = {reviewBot}
