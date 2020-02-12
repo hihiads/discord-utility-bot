@@ -89,7 +89,6 @@ const stats = async (request) => {
 
 	response = await request.msgObj.author.send( 'Average review for ' + coach + ' is ' + avgRating.toFixed(2) )
 
-
 	return `rating sent to ${request.msgObj.author.username}`
 }
 
