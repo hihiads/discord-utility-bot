@@ -36,8 +36,10 @@ const scheduleBot = async (request) => {
 //---------------------
 
 const lobby = async (request) => {
-	const emoji = request.msgObj.guild.emojis.find(emoji => emoji.name === 'baby_yoda');
+	//use a custom emoji
+	//const emoji = request.msgObj.guild.emojis.find(emoji => emoji.name === 'baby_yoda');
 
+	let day = request.message[2]
 
 	// setup a lobby on saturday ( in 1 minute )
 
@@ -55,8 +57,9 @@ const lobby = async (request) => {
 	// everyone one who reacted gets put on the google spreadsheet
 	// each person will get a DM with a lnk to the general voice channel
 
-	let message = await na_channel.send( 'hello na!' )
-	return message.react(emoji)
+	// \u200B is the code for invisible space for line breaks
+	let message = await na_channel.send( `This ${ day } we will be hosting several 5v5 lobbies for beginners. \nSmash that  ✅  if you would like to participate!\n\u200B` )
+	return message.react('✅')
 
 }
 
