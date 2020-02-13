@@ -1,4 +1,5 @@
 let { reviewBot } = require( './bots/reviewBot.js' )
+let { scheduleBot } = require( './bots/scheduleBot.js' )
 
 // create google api creds file
 const fs = require('fs');
@@ -56,7 +57,10 @@ client.on( 'message', msg => {
 		'msgObj': msg
 	}
 
-	const controller = new Map( [['review', reviewBot]] )
+	const controller = new Map( [
+		['review', reviewBot], 
+		['schedule', scheduleBot]
+	] )
 
 	let bot = controller.get(request.name)
 
