@@ -57,13 +57,8 @@ function onMessage(data) {
 
   switch (message.taskName) {
     case 'resetInboxCount': 
-    console.log( 'resetting inbox count...' )
+      console.log( 'resetting inbox count...' )
       // do something....
-      break
-
-    case 'otheTask': 
-    console.log( 'doing the other task...' )
-      // do another thing....
       break
 
     default:
