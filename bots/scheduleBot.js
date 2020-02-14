@@ -58,7 +58,7 @@ const lobby = async (request) => {
 	// each person will get a DM with a lnk to the general voice channel
 
 	// \u200B is the code for invisible space for line breaks
-	let message = await na_channel.send( `This ${ day } we will be hosting several 5v5 lobbies for beginners. \nSmash that  ✅  if you would like to participate!\n\u200B` )
+	let message = await na_channel.send( `test This ${ day } we will be hosting several 5v5 lobbies for beginners. \nSmash that  ✅  if you would like to participate!\n\u200B` )
 	return message.react('✅')
 
 }
