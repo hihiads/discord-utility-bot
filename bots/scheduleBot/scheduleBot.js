@@ -1,13 +1,9 @@
-const Agenda = require('agenda')
-const connectionString = process.env.MONGODB_URI
-const agenda = new Agenda({
-	db: {address: connectionString, options: { useUnifiedTopology: true, autoReconnect: false, reconnectTries: false, reconnectInterval: false }, collection: 'lobby matches'},
-	processEvery: '10 seconds'
-});
+// define the job to do at <number of> <minutes or hours>
+const {hasPermission, sendMessage} = require( '../../helpers.js' )
+const {getAuthToken, postSpreadSheetValues, getSpreadSheet} = require('../../services/googleSheets.js');
+const { getHumanInterval } = require( '../../getHumanInterval.js' )
+const humanInterval = require( 'human-interval' )
 
-
-const {hasPermission, sendMessage} = require( '../helpers.js' )
-const {getAuthToken, postSpreadSheetValues, getSpreadSheet} = require('../services/googleSheets.js');
 
 const spreadsheetId = '1uCkgD4sSi5-SBtuMQkIxa_NFCp36SJLO7b_97zf0M9A';
 const sheetName = '';
@@ -70,41 +66,21 @@ const lobby = async (request) => {
 	}
 
 	let message = await na_channel.send( `We will be hosting a 5v5 lobby for beginners in ${numberOf} ${minutesOrHours}! \nSmash that  ✅  if you would like to participate!\n\u200B` )
-	message.react('✅')
+	await message.react('✅')
 	
 	messageID = message.id
 	channelID = message.channel.id
+	timeUntilEventString = await getHumanInterval(request.msgObj.content)
 
-	
+	milliseconds = humanInterval(timeUntilEventString)
 
+	console.log( `milliseconds until job runs: ${milliseconds}` )
 
+	timestamp = new Date().getTime() + milliseconds
 
+	await global.agenda.schedule(timestamp, 'setup lobby', { messageID: messageID, channelID: channelID });
 
-	// define the job to do at <number of> <minutes or hours>
-	agenda.define('setup lobby', {priority: 'high', concurrency: 10}, async (job) => {
-		// const {name} = job.attrs.data;
-		nachannel = await global.client.channels.get( channelID )
-		myLobbyMessage = await nachannel.fetchMessage( messageID )
-		reactionsCollection = await myLobbyMessage.reactions
-		messageReaction = await reactionsCollection.get('✅')
-		users = await messageReaction.fetchUsers()
-		console.log( users )
-
-		// delete from mongo db when completed
-		// agenda.cancel( { name: 'setup lobby' }).then((value) => {
-		//   console.log( value )
-		// })
-	});
-
-	setupLobby = async (name) => {
-		await agenda.start();
-		await agenda.schedule(`in ${numberOf} ${minutesOrHours}`, 'setup lobby');
-	}
-
-	result = await setupLobby()
-
-	return result
-
+	return `new job will run task at this timestamp: ${timestamp}`
 
 	//notes:
 	//use a custom emoji
@@ -120,9 +96,20 @@ const lobby = async (request) => {
 //---------------------
 //---------------------
 
+function seconds(s){ 
+	return 1000 * s
+}
 
+function minutes(m){ 
+	return 1000 * 60 * m
+}
 
+function hours(h){ 
+	return 1000 * 60 * 60 * h
+}
 
-
+function hours(d){ 
+	return 1000 * 60 * 60 * 24 * d
+}
 
 module.exports = {scheduleBot}

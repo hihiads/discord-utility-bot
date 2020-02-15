@@ -1,5 +1,11 @@
 let { reviewBot } = require( './bots/reviewBot.js' )
-let { scheduleBot } = require( './bots/scheduleBot.js' )
+let { scheduleBot } = require( './bots/scheduleBot/scheduleBot.js' )
+let { startAgendaJobs } = require( './bots/scheduleBot/startAgendaJobs.js' )
+
+// spin up agenda to check for queued up scheduled jobs
+startAgendaJobs()
+
+
 
 // create google api creds file
 const fs = require('fs');

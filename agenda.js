@@ -18,7 +18,8 @@ agenda.define('send lobby invites', {priority: 'high', concurrency: 10}, (job, d
 
 remindMe = async (name) => {
 	await agenda.start();
-	await agenda.schedule('in 5 seconds', 'send lobby invites', {name: name});
+	date = new Date( "February 15 2020 12:03" )
+	await agenda.schedule(date, 'send lobby invites', {name: name});
 }
 
 console.log(remindMe('John Smith'))
