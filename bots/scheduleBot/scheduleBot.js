@@ -72,11 +72,16 @@ const lobby = async (request) => {
 	channelID = message.channel.id
 	timeUntilEventString = await getHumanInterval(request.msgObj.content)
 
+	console.log( `timeUntilEventString: ${timeUntilEventString}` )
+
+	if ( timeUntilEventString === undefined) { return `Day was undefined. Maybe a typo?`}
+
 	milliseconds = humanInterval(timeUntilEventString)
 
 	console.log( `milliseconds until job runs: ${milliseconds}` )
 
-	timestamp = new Date().getTime() + milliseconds
+	currentMinutes = minutesToMilliseconds(new Date().getMinutes())
+	timestamp = (new Date().getTime() + milliseconds) - currentMinutes
 
 	await global.agenda.schedule(timestamp, 'setup lobby', { messageID: messageID, channelID: channelID });
 
@@ -110,6 +115,10 @@ function hours(h){
 
 function hours(d){ 
 	return 1000 * 60 * 60 * 24 * d
+}
+
+function minutesToMilliseconds(m){
+	return 1000 * 60 * m
 }
 
 module.exports = {scheduleBot}

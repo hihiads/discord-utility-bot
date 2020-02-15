@@ -19,6 +19,9 @@ function getNumDaysUntilEvent(message, hourObj) {
 	let dayOfEvent = message.split(" ")[2]
 	dayOfEvent = days[dayOfEvent.toLowerCase()]
 
+	if( dayOfEvent === undefined )
+		return undefined
+
 	let daysUntilEvent = fromToday
 	let count = 0
 
@@ -35,14 +38,21 @@ function getNumDaysUntilEvent(message, hourObj) {
 function getNumHoursUntilEvent(message) { 
 	daysToSubtract = 0
 	currentHour = new Date().getHours()
+	currentPartOfDay = ""
+
+	if (currentHour >= 0 && currentHour < 12) {
+		currentPartOfDay = "am"
+	} else {
+		currentPartOfDay = "pm"
+	}
 
 	targetHour = parseInt(message.split( " " )[4])
-	partOfDay = message.split( " " )[5]
+	partOfDay = message.split( " " )[5].toLowerCase()
 
-	if ( partOfDay.toLowerCase() === "pm" ){
+	if ( partOfDay === "pm" ){
 		targetHour = 12 + targetHour
 	} 
-	if ( targetHour === 12 && partOfDay.toLowerCase() === "am" ){ 
+	if ( targetHour === 12 && partOfDay === "am" ){ 
 		targetHour = 0
 	}
 
@@ -56,7 +66,14 @@ function getNumHoursUntilEvent(message) {
 		count++
 	}
 
-	hoursUntilEvent = count
+
+	if (targetHour === currentHour && partOfDay === currentPartOfDay) {
+		hoursUntilEvent = 0
+	} else {
+		hoursUntilEvent = count
+	}
+
+
 
  	return { hoursAway: hoursUntilEvent, daysToSubtract: daysToSubtract } 
 }
@@ -66,8 +83,16 @@ function getHumanInterval(message){
 	hourObj = getNumHoursUntilEvent(message)
 	numOfDays = getNumDaysUntilEvent( message, hourObj )
 
+	if ( numOfDays === undefined ){ 
+		return undefined
+	}
+
 	if ( numOfDays === 0 ){ 
 		return hourObj.hoursAway === 1 ? `one hour` : `${hourObj.hoursAway} hours`
+	}
+
+	if ( hourObj.hoursAway === 0 ) { 
+		return numOfDays === 1 ? `one day` : `${numOfDays} days`
 	}
 
 	return `in ${numOfDays} days and ${hourObj.hoursAway} hours`
