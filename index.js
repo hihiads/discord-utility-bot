@@ -29,7 +29,7 @@ if (!fs.existsSync('./gCreds.json')) {
 }
 
 // connect to discord
-const Discord = require('discord.js')
+global.Discord = require('discord.js')
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN
 global.client = new Discord.Client()
 client.login(DISCORD_TOKEN)
