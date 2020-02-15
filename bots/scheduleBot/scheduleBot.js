@@ -81,7 +81,7 @@ const lobby = async (request) => {
 	console.log( `milliseconds until job runs: ${milliseconds}` )
 
 	currentMinutes = minutesToMilliseconds(new Date().getMinutes())
-	timestamp = (new Date().getTime() + milliseconds) - currentMinutes
+	timestamp = (new Date().getTime() + (milliseconds) - currentMinutes) - minutes(59) - seconds(50)
 
 	await global.agenda.schedule(timestamp, 'setup lobby', { messageID: messageID, channelID: channelID });
 
