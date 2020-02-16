@@ -78,9 +78,9 @@ players\t\t\t\t\t\t\t\t\t\tpositions
 			await coach.send( playerData )
 
 			// delete from mongo db when completed
-			// agenda.cancel( { name: 'setup lobby' }).then((value) => {
-			//   console.log( value )
-			// })
+			agenda.cancel( { name: 'setup lobby' }).then((value) => {
+			  console.log( 'task deleted' )
+			})
 		});
 	global.agenda.start(); 
 }
