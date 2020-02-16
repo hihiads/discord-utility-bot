@@ -45,7 +45,7 @@ const me = async (request) => {
 	// get student user object
 	let rawID = request.message[2]
 	let studentID = rawID.substring(3, rawID.length-1)
-	let studentObj = await client.fetchUser(studentID)
+	let studentObj = await global.client.fetchUser(studentID)
 
 	// student = studentObj.lastMessage.member.nickname
 	student = studentObj.username
