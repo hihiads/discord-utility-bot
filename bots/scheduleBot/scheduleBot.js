@@ -3,7 +3,8 @@ const {hasPermission, sendMessage} = require( '../../helpers.js' )
 const {getAuthToken, postSpreadSheetValues, getSpreadSheet} = require('../../services/googleSheets.js');
 const { getHumanInterval } = require( '../../getHumanInterval.js' )
 const humanInterval = require( 'human-interval' )
-
+var { DateTime } = require('luxon');
+serverTime = DateTime.local();
 
 const spreadsheetId = '1uCkgD4sSi5-SBtuMQkIxa_NFCp36SJLO7b_97zf0M9A';
 const sheetName = '';
@@ -61,11 +62,11 @@ const lobby = async (request) => {
 	let na_channel = ''
 
 	for( let key of lobby.values() ){
-		if( key.name === 'na-announcements' )
+		if( key.name === 'bot-tests' )
 			na_channel = key
 	}
 
-	let message = await na_channel.send( `${day} at ${time}, we will be hosting a 5v5 lobby for beginners! \nSmash that  ✅  if you would like to participate. Also pick 2 positions you are comfortable playing using the reactions below. Thanks!\n\u200B` )
+	let message = await na_channel.send( `${day} at ${time}, we will be hosting a 5v5 lobby for beginners! \nSmash that  ✅  if you would like to participate. Also pick 2 positions you are comfortable playing using the reactions below. Thanks!\n\u200B\npsst hey nerd server time zone is ${serverTime.zoneName}` )
 	await message.react('✅')
 	await message.react( '1️⃣' )
 	await message.react( '2️⃣' )
@@ -84,12 +85,26 @@ const lobby = async (request) => {
 
 	milliseconds = humanInterval(timeUntilEventString)
 
-	console.log( `milliseconds until job runs: ${milliseconds}` )
+	
 
-	currentMinutes = minutesToMilliseconds(new Date().getMinutes())
-	timestamp = (new Date().getTime() + (milliseconds) - currentMinutes) - minutes(59) - seconds(0)
+	currentMinutesInMilliseconds = minutesToMilliseconds(new Date().getMinutes())
+
+	timestamp = (new Date().getTime() - currentMinutesInMilliseconds) + (milliseconds - minutes(59))
+
+	remainingTime = Math.abs(milliseconds - minutes(59))
+
+	
+	await console.log( 
+` milliseconds until job runs: ${remainingTime}\n`,
+`milliseconds: ${milliseconds}\n`,
+`currentMinutesInMilliseconds: ${currentMinutesInMilliseconds}\n`,
+`timestamp: ${timestamp}\n`,
+`remainingTime: ${remainingTime}` )
+
 
 	await global.agenda.schedule(timestamp, 'setup lobby', { messageID: messageID, channelID: channelID, coachID: coachID});
+
+
 
 	return `new job will run task at this timestamp: ${timestamp}`
 
