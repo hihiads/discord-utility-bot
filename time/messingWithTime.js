@@ -1,7 +1,12 @@
 function l(x) {return console.log(x)}
+
 const spacetime = require('spacetime')
-const redis = require( 'redis' )
 const humanIntervalToDate = require( 'date.js' )
+
+const redis = require( 'redis' )
+let client = redis.createClient(process.env.REDISCLOUD_URL, {no_ready_check: true})
+
+
 
 function getUserEpoch(message, userTimeZoneTZ){		
 
@@ -13,15 +18,25 @@ function getUserEpoch(message, userTimeZoneTZ){
 	return spacetime( dateObj, userTimeZoneTZ ).time( time ).epoch
 }
 
-function getUserTimeZoneTZ(username) {
-	// connect to redis key value store
-	let client = redis.createClient(process.env.REDISCLOUD_URL, {no_ready_check: true})
+
+async function getUserTimeZoneTZ(username) {
 	
-	// check if user is in redis, if not tell them to set their timezone
-	
-	return client.get( username, function(err, reply){
-		console.log( reply )
+	let promise = new Promise( (resolve, reject) => {
+		client.get(username, (err, reply) => {
+			let userTimeZoneTZ = reply.toString()
+			resolve(userTimeZoneTZ)
+		})
 	})
+
+	let response = await promise;
+
+	return response
 }
 
-getUserTimeZoneTZ('foo')
+let main = async () => {
+	let timezone = await getUserTimeZoneTZ('foo')
+
+	console.log(timezone)
+}
+
+main()
