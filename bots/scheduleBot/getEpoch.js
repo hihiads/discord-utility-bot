@@ -6,8 +6,7 @@ const humanIntervalToDate = require( 'date.js' )
 const redis = require( 'redis' )
 let client = redis.createClient(process.env.REDISCLOUD_URL, {no_ready_check: true})
 
-
-
+// use timezone names listed on this website: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
 function getUserEpoch(message, userTimeZoneTZ){		
 
@@ -23,7 +22,7 @@ function getUserEpoch(message, userTimeZoneTZ){
 
 
 
-async function getUserTimeZoneTZ(username) {
+async function getUserTimeZone(username) {
 	
 	let promise = new Promise( (resolve, reject) => {
 		client.get(username, (err, reply) => {
@@ -39,9 +38,7 @@ async function getUserTimeZoneTZ(username) {
 
 
 
-
-
-async function setUserTimeZoneTZ(username, timezone) {
+async function setUserTimeZone(username, timezone) {
 
 	let promise = new Promise( (resolve, reject) => {
 		client.set(username, timezone, (err, reply) => {
@@ -55,21 +52,9 @@ async function setUserTimeZoneTZ(username, timezone) {
 	return response
 }
 
-
-
-let main = async () => {
-
-	//setResponse = await setUserTimeZoneTZ('john', 'America/New_York')
-
-	//l(setResponse)
-
-	// if (setResponse == "OK") {
-	// 	let timezone = await getUserTimeZoneTZ('john')
-	// 	l(timezone)
-	// }
-
-	let timezone = await getUserTimeZoneTZ( 'john' )
-	console.log( timezone )
+module.exports = {
+	getUserEpoch,
+	getUserTimeZone,
+	setUserTimeZone
 }
 
-main()

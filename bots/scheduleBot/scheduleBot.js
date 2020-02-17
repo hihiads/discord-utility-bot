@@ -77,36 +77,15 @@ const lobby = async (request) => {
 	messageID = message.id
 	channelID = message.channel.id
 	coachID = request.msgObj.author.id
-	timeUntilEventString = await getHumanInterval(request.msgObj.content)
 
-	console.log( `timeUntilEventString: ${timeUntilEventString}` )
-
-	if ( timeUntilEventString === undefined) { return `Day was undefined. Maybe a typo?`}
-
-	milliseconds = humanInterval(timeUntilEventString)
-
+	// check if user is already stored in redis key/value store for timezone
 	
 
-	currentMinutesInMilliseconds = minutesToMilliseconds(new Date().getMinutes())
+	// get the epoch
+	epoch = await getHumanInterval(request.msgObj.content)
 
-	timestamp = (new Date().getTime() - currentMinutesInMilliseconds) + (milliseconds - minutes(59))
+	await global.agenda.schedule(epoch, 'setup lobby', { messageID: messageID, channelID: channelID, coachID: coachID});
 
-	remainingTime = Math.abs(milliseconds - minutes(59))
-
-	
-	await console.log( 
-` milliseconds until job runs: ${remainingTime}\n`,
-`milliseconds: ${milliseconds}\n`,
-`currentMinutesInMilliseconds: ${currentMinutesInMilliseconds}\n`,
-`timestamp: ${timestamp}\n`,
-`remainingTime: ${remainingTime}` )
-
-
-	await global.agenda.schedule(timestamp, 'setup lobby', { messageID: messageID, channelID: channelID, coachID: coachID});
-
-
-
-	return `new job will run task at this timestamp: ${timestamp}`
 
 	//notes:
 	//use a custom emoji
