@@ -20,14 +20,16 @@ function getUserEpoch(message, userTimeZoneTZ){
 
 
 
-
-
 async function getUserTimeZone(username) {
 	
 	let promise = new Promise( (resolve, reject) => {
 		client.get(username, (err, reply) => {
-			let userTimeZoneTZ = reply.toString()
-			resolve(userTimeZoneTZ)
+			try{
+				let userTimeZoneTZ = reply.toString()
+				resolve(userTimeZoneTZ)
+			} catch(err){
+				resolve( false )
+			}
 		})
 	})
 
@@ -51,6 +53,20 @@ async function setUserTimeZone(username, timezone) {
 
 	return response
 }
+
+
+let main = async () => {
+	let timezone = await getUserTimeZone( 'john' )
+	if( timezone == false ){
+		return false
+		//console.log( 'please setup your timezone using the "!setup timezone <your timezone name>" command. You can find the timezone names here: https://bit.ly/2P1Zyl3' )
+	}
+	
+	return timezone
+}
+
+main()
+
 
 module.exports = {
 	getUserEpoch,
