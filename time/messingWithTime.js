@@ -1,22 +1,27 @@
 function l(x) {return console.log(x)}
-
 const spacetime = require('spacetime')
+const redis = require( 'redis' )
 const humanIntervalToDate = require( 'date.js' )
 
-let johnsRequest = "!schedule lobby today at 10am".split( ' ' ).slice( 2, 5 ).join( ' ' )
-let lucasRequest = "!schedule lobby today at 3pm".split( ' ' ).slice( 2, 5 ).join( ' ' )
-johnsTime = johnsRequest.split( ' ' )[2]
-lucasTime = lucasRequest.split( ' ' )[2]
+function getUserEpoch(message, userTimeZoneTZ){		
 
-let serverRegion = "Etc/UTC"
-let johnsRegion = "America/New_York"
-let lucasRegion = "Europe/Berlin"
+	let request = message.split( ' ' ).slice( 2, 5 ).join( ' ' )
+	time = message.split( ' ' )[2]
 
-johnsServerTime = humanIntervalToDate(johnsRequest)
-lucasServerTime = humanIntervalToDate(lucasRequest)
+	dateObj = humanIntervalToDate(request)
 
-johnsEpoch = spacetime( johnsServerTime, johnsRegion ).time( johnsTime )
-lucasEpoch = spacetime( lucasServerTime, lucasRegion ).time(lucasTime)
+	return spacetime( dateObj, userTimeZoneTZ ).time( time ).epoch
+}
 
-l( johnsEpoch )
-l( lucasEpoch )
+function getUserTimeZoneTZ(username) {
+	// connect to redis key value store
+	let client = redis.createClient(process.env.REDISCLOUD_URL, {no_ready_check: true})
+	
+	// check if user is in redis, if not tell them to set their timezone
+	
+	return client.get( username, function(err, reply){
+		console.log( reply )
+	})
+}
+
+getUserTimeZoneTZ('foo')

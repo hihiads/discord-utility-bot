@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "date.js": "^0.3.3",
+    "redis": "^3.0.2",
     "spacetime": "^6.4.1"
   }
 }
