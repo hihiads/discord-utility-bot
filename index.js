@@ -62,8 +62,11 @@ discordClient.on( 'message', msg => {
 	if (message[0][0] !== '!')
 		return
 
-	if(message[1] === undefined)
-		reject( 'command rejected in summonBot.js' )
+	if(message[1] === undefined){
+		msg.reply("sorry that is an invalid !command")
+		console.log(`user entered an invalid command: ${message[1]}`)
+		return
+	}
 
 	// resolve with an object - bot's name, bot's command and original message as an array
 	let request = { 
@@ -79,8 +82,10 @@ discordClient.on( 'message', msg => {
 		['setup', setupBot]
 	] )
 
-	let bot = controller.get(request.name)
 
+		let bot = controller.get(request.name)
+
+	
 	bot(request)
 	.then( (response) => { 
 		console.log(response)

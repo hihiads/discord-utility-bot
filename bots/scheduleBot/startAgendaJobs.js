@@ -40,7 +40,7 @@ function startAgendaJobs() {
 
 					let playerFound = players.find( (element) => element.name == username ) 
 					if( playerFound) { 
-						if( reaction != '✅' ){ 
+						if( reaction == '1️⃣' || reaction == '2️⃣' || reaction == '3️⃣' || reaction == '4️⃣' || reaction == '5️⃣' ){ 
 							playerFound.positions.push( reaction )
 						}
 					} else{
@@ -48,7 +48,7 @@ function startAgendaJobs() {
 							name: username,
 							positions: []
 						}
-						if( reaction != '✅' ){
+						if( reaction == '1️⃣' || reaction == '2️⃣' || reaction == '3️⃣' || reaction == '4️⃣' || reaction == '5️⃣') {
 							player.positions.push( reaction )
 						}
 						players.push( player )
