@@ -55,17 +55,17 @@ async function setUserTimeZone(username, timezone) {
 }
 
 
-let main = async () => {
-	let timezone = await getUserTimeZone( 'john' )
-	if( timezone == false ){
-		return false
-		//console.log( 'please setup your timezone using the "!setup timezone <your timezone name>" command. You can find the timezone names here: https://bit.ly/2P1Zyl3' )
-	}
+// let main = async () => {
+// 	let timezone = await getUserTimeZone( 'john' )
+// 	if( timezone == false ){
+// 		return false
+// 		//console.log( 'please setup your timezone using the "!setup timezone <your timezone name>" command. You can find the timezone names here: https://bit.ly/2P1Zyl3' )
+// 	}
 	
-	return timezone
-}
+// 	return timezone
+// }
 
-main()
+// main()
 
 
 module.exports = {

@@ -1,5 +1,6 @@
 let { reviewBot } = require( './bots/reviewBot.js' )
 let { scheduleBot } = require( './bots/scheduleBot/scheduleBot.js' )
+let { setupBot } = require( './bots/setupBot.js' )
 let { startAgendaJobs } = require( './bots/scheduleBot/startAgendaJobs.js' )
 
 // spin up agenda to check for queued up scheduled jobs
@@ -65,7 +66,8 @@ client.on( 'message', msg => {
 
 	const controller = new Map( [
 		['review', reviewBot], 
-		['schedule', scheduleBot]
+		['schedule', scheduleBot],
+		['setup', setupBot]
 	] )
 
 	let bot = controller.get(request.name)

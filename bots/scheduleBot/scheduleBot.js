@@ -1,10 +1,18 @@
 // define the job to do at <number of> <minutes or hours>
+const {
+	getUserEpoch,
+	getUserTimeZone,
+	setUserTimeZone
+} = require( './getEpoch.js' )
+
+
 const {hasPermission, sendMessage} = require( '../../helpers.js' )
+
+
 const {getAuthToken, postSpreadSheetValues, getSpreadSheet} = require('../../services/googleSheets.js');
-const { getHumanInterval } = require( '../../getHumanInterval.js' )
-const humanInterval = require( 'human-interval' )
-var { DateTime } = require('luxon');
-serverTime = DateTime.local();
+
+
+
 
 const spreadsheetId = '1uCkgD4sSi5-SBtuMQkIxa_NFCp36SJLO7b_97zf0M9A';
 const sheetName = '';
@@ -42,49 +50,68 @@ const scheduleBot = async (request) => {
 
 const lobby = async (request) => {
 
-	/* command: !schedule lobby in <number> <minutes or hours>
+	// command: !schedule lobby <day> at <time>
+	// example: !schedule lobby monday at 8:30pm
 
-	Bot posts in channel "Lobby match happening in <time> <minutes or hours> react with ✅ if you would like to participate!"
+	// first check if the user has a redis key/value so we know their timezone
 
-	keep the message variable to check for reactions end of timer
+	// check the user who sent the command
+	coachName = await request.msgObj.author.username
+	console.log( coachName )
 
-	Send DM to everyone who reacted with invite and link to general chat room
+	coachTimeZone = await getUserTimeZone( coachName )
 
-	next steps: take players and balance based on positions they would like to play */
+	if( coachTimeZone == false ) {
+		// coach isn't in redis yet so prompt them to use the command to setup their time zone
+
+		request.msgObj.reply( 'First time? Looks like you need to setup your timezone! \u200B\n\u200B\nUse the command "!setup timezone <my timezone TZ name>"\u200B\nuse timezone names listed on this website: \u200B\nhttps://en.wikipedia.org/wiki/List_of_tz_database_time_zones' )
+
+	}
+
+	
+
+
+	//Bot posts in channel "Lobby match happening in <time> <minutes or hours> react with ✅ if you would like to participate!"
+
+	//keep the message variable to check for reactions end of timer
+
+	//Send DM to everyone who reacted with invite and link to general chat room
+
+	//next steps: take players and balance based on positions they would like to play 
 
 	// scheduling the match is two parts:
 	// creating the initial post to the general channel
 
-	let day = request.message[2].charAt(0).toUpperCase() + request.message[2].slice(1)
-	let time = request.message[4] + ' ' + request.message[5]
+	// let day = request.message[2].charAt(0).toUpperCase() + request.message[2].slice(1)
+	// let time = request.message[4] + ' ' + request.message[5]
 
-	let lobby = await global.client.channels
-	let na_channel = ''
+	// let lobby = await global.client.channels
+	// let na_channel = ''
 
-	for( let key of lobby.values() ){
-		if( key.name === 'bot-tests' )
-			na_channel = key
-	}
+	// for( let key of lobby.values() ){
+	// 	if( key.name === 'bot-tests' )
+	// 		na_channel = key
+	// }
 
-	let message = await na_channel.send( `${day} at ${time}, we will be hosting a 5v5 lobby for beginners! \nSmash that  ✅  if you would like to participate. Also pick 2 positions you are comfortable playing using the reactions below. Thanks!\n\u200B\npsst hey nerd server time zone is ${serverTime.zoneName}` )
-	await message.react('✅')
-	await message.react( '1️⃣' )
-	await message.react( '2️⃣' )
-	await message.react( '3️⃣' )
-	await message.react( '4️⃣' )
-	await message.react( '5️⃣' )
+	// let message = await na_channel.send( `${day} at ${time}, we will be hosting a 5v5 lobby for beginners! \nSmash that  ✅  if you would like to participate. Also pick 2 positions you are comfortable playing using the reactions below. Thanks!\n\u200B\npsst hey nerd server time zone is ${serverTime.zoneName}` )
+	// await message.react('✅')
+	// await message.react( '1️⃣' )
+	// await message.react( '2️⃣' )
+	// await message.react( '3️⃣' )
+	// await message.react( '4️⃣' )
+	// await message.react( '5️⃣' )
 	
-	messageID = message.id
-	channelID = message.channel.id
-	coachID = request.msgObj.author.id
+	// messageID = message.id
+	// channelID = message.channel.id
+	// coachID = request.msgObj.author.id
 
-	// check if user is already stored in redis key/value store for timezone
+	// // check if user is already stored in redis key/value store for timezone
 	
 
-	// get the epoch
-	epoch = await getHumanInterval(request.msgObj.content)
+	// // get the epoch
+	// epoch = await getHumanInterval(request.msgObj.content)
 
-	await global.agenda.schedule(epoch, 'setup lobby', { messageID: messageID, channelID: channelID, coachID: coachID});
+	// await global.agenda.schedule(epoch, 'setup lobby', { messageID: messageID, channelID: channelID, coachID: coachID});
 
 
 	//notes:
