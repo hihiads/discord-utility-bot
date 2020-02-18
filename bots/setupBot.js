@@ -1,5 +1,5 @@
-const {hasPermission, sendMessage} = require( '../helpers.js' )
-const redis = require( 'redis' )
+const {hasPermission, sendMessage, collectMessage} = require( '../helpers.js' )
+
 
 const setupBot = async (request) => {
 
@@ -23,22 +23,40 @@ const setupBot = async (request) => {
 
 
 
-const timezone = async (request) => {
-	sentMsgObj = await sendMessage(request.msgObj.author, 'please enter your timezone')
-	let responseObj = await getTimeZone( sentMsgObj )
-	let timeZone = await responseObj.first().content
+let timezone = async (request) => {
 
-	return timeZone
+	// prompt the user to enter their timezone
+	sentMsgObj = await sendMessage(request.msgObj.author, 'Please enter your timezone. You can copy/paste the "TZ datebase name":\nhttps://en.wikipedia.org/wiki/List_of_tz_database_time_zones\nExample: America/New_York (do not include quotation marks just the text)')
+	
+
+	// collect the response
+	let responseObj = await collectMessage( sentMsgObj )
+
+	// get the username and timezone from the response object
+	let username = await responseObj.first().author.username
+	let timezone = await responseObj.first().content
+
+
+	// post to redis key, value (username, timezone)
+
+	let valueSet = await redisClient.set(username, timezone)
+	console.log(`redis set value response code: ${valueSet}`)
+
+
+	if (valueSet) {
+		await sendMessage(request.msgObj.author, 'Timezone set. Thanks!')
+	}
+
+	
+	// get the timezone of the user as a test
+	let userTimeZone = await getAsync(username)
+	
+
+	return userTimeZone
 
 }
 
 
 
-
-const getTimeZone = (sentMsgObj) => new Promise((resolve, reject) => {
-	const filter = m => (typeof m.content === 'string')
-	let channel = sentMsgObj.channel
-	resolve(channel.awaitMessages(filter, { max: 1 }))
-})
 
 module.exports = {setupBot}

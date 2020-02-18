@@ -36,8 +36,11 @@ if (!fs.existsSync('./gCreds.json')) {
 }
 
 // connect to redis
-const redis = require( 'redis' )
-global.redisClient = redis.createClient(process.env.REDISCLOUD_URL, {no_ready_check: true})
+const { promisify } = require("util")
+redis = require( 'redis' )
+redisClient = redis.createClient(process.env.REDISCLOUD_URL, {no_ready_check: true})
+
+getAsync = promisify(redisClient.get).bind(redisClient)
 
 
 // connect to discord

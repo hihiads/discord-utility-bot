@@ -4,9 +4,12 @@ const spacetime = require('spacetime')
 const humanIntervalToDate = require( 'date.js' )
 
 
+
 // use timezone names listed on this website: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
-function getUserEpoch(message, userTimeZoneTZ){		
+function getUserEpoch(message, userTimeZoneTZ){	
+
+	// message example !schedule lobby today at 3:00pm	
 
 	let request = message.split( ' ' ).slice( 2, 5 ).join( ' ' )
 	time = message.split( ' ' )[2]
@@ -18,57 +21,8 @@ function getUserEpoch(message, userTimeZoneTZ){
 
 
 
-async function getUserTimeZone(username) {
-	
-	let promise = new Promise( (resolve, reject) => {
-		global.redisClient.get(username, (err, reply) => {
-			try{
-				let userTimeZoneTZ = reply.toString()
-				resolve(userTimeZoneTZ)
-			} catch(err){
-				resolve( false )
-			}
-		})
-	})
-
-	let response = await promise;
-
-	return response
-}
-
-
-
-async function setUserTimeZone(username, timezone) {
-
-	let promise = new Promise( (resolve, reject) => {
-		redisClient.set(username, timezone, (err, reply) => {
-			let response = reply.toString()
-			resolve(response)
-		})
-	})
-
-	let response = await promise;
-
-	return response
-}
-
-
-// let main = async () => {
-// 	let timezone = await getUserTimeZone( 'john' )
-// 	if( timezone == false ){
-// 		return false
-// 		//console.log( 'please setup your timezone using the "!setup timezone <your timezone name>" command. You can find the timezone names here: https://bit.ly/2P1Zyl3' )
-// 	}
-	
-// 	return timezone
-// }
-
-// main()
 
 
 module.exports = {
-	getUserEpoch,
-	getUserTimeZone,
-	setUserTimeZone
+	getUserEpoch
 }
-

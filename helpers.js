@@ -43,5 +43,11 @@ const sendMessage = (user, botMsg) => new Promise((resolve, reject) => {
 
 
 
+const collectMessage = (sentMsgObj) => new Promise((resolve, reject) => {
+	const filter = m => (typeof m.content === 'string')
+	let channel = sentMsgObj.channel
+	resolve(channel.awaitMessages(filter, { max: 1 }))
+})
 
-module.exports = {hasPermission, sendMessage}
+
+module.exports = {hasPermission, sendMessage, collectMessage}
