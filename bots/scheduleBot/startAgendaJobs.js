@@ -13,7 +13,7 @@ function startAgendaJobs() {
 			const {messageID, channelID, coachID} = job.attrs.data;
 
 			// get the channel, message then drill down to the reactions collection
-			let nachannel = await global.client.channels.get( channelID )
+			let nachannel = await global.discordClient.channels.get( channelID )
 			let myLobbyMessage = await nachannel.fetchMessage( messageID )
 			let reactionsCollection = await myLobbyMessage.reactions
 
@@ -33,7 +33,7 @@ function startAgendaJobs() {
 					}
 
 					// send them a message and tally up their reactions
-					let user = await global.client.fetchUser( userID )
+					let user = await global.discordClient.fetchUser( userID )
 					if( reaction == '✅' ){
 						user.send( 'Pssst! The lobby match will be starting in a few minutes. You can join the voice channel here: https://discord.gg/rxpyZe' )
 					}
@@ -56,7 +56,7 @@ function startAgendaJobs() {
 				}
 			}
 
-			coach = await global.client.fetchUser( coachID )
+			coach = await global.discordClient.fetchUser( coachID )
 
 			let playerData = `
 

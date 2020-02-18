@@ -1,4 +1,5 @@
 const {hasPermission, sendMessage} = require( '../helpers.js' )
+const redis = require( 'redis' )
 
 const setupBot = async (request) => {
 

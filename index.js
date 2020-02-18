@@ -35,16 +35,22 @@ if (!fs.existsSync('./gCreds.json')) {
 
 }
 
+// connect to redis
+const redis = require( 'redis' )
+global.redisClient = redis.createClient(process.env.REDISCLOUD_URL, {no_ready_check: true})
+
+
 // connect to discord
 global.Discord = require('discord.js')
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN
-global.client = new Discord.Client()
-client.login(DISCORD_TOKEN)
-client.on( 'ready', msg => console.log( 'bot connected' ))
+global.discordClient = new Discord.Client()
+discordClient.login(DISCORD_TOKEN)
+discordClient.on( 'ready', msg => console.log( 'bot connected' ))
+
 
 
 // run main() when new messages detected on the server
-client.on( 'message', msg => {
+discordClient.on( 'message', msg => {
 	// check if we're being summoned and return the correct bot
 	// split up message into an array
 	const message =  msg.content.split( " " )

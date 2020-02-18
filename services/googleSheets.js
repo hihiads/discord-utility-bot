@@ -10,6 +10,7 @@ async function getAuthToken() {
     scopes: SCOPES
   });
   const authToken = await auth.getClient();
+
   return authToken;
 }
 
@@ -23,6 +24,7 @@ async function getSpreadSheet({spreadsheetId, auth, sheetName}) {
 }
 
 async function postSpreadSheetValues({spreadsheetId, auth, sheetName, values}) {
+
 	var request = 
 	{
 		// The ID of the spreadsheet to update.
@@ -49,6 +51,7 @@ async function postSpreadSheetValues({spreadsheetId, auth, sheetName, values}) {
 
 		auth: auth
 	}
+
 
 
 	const res = await sheets.spreadsheets.values.append(request);

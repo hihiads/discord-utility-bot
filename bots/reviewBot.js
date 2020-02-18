@@ -45,7 +45,7 @@ const me = async (request) => {
 	// get student user object
 	let rawID = request.message[2]
 	let studentID = rawID.substring(3, rawID.length-1)
-	let studentObj = await global.client.fetchUser(studentID)
+	let studentObj = await global.discordClient.fetchUser(studentID)
 
 	// student = studentObj.lastMessage.member.nickname
 	student = studentObj.username
@@ -65,7 +65,9 @@ const me = async (request) => {
 
 	// post to the google sheet
 	let values = [coach, student, score, comment]
+
 	const auth = await getAuthToken();
+
 	response = await postSpreadSheetValues({spreadsheetId, auth, sheetName, values})
 
 	return `${values} added to google spreadsheet!`	
@@ -76,7 +78,7 @@ const stats = async (request) => {
 	// get coach nickname
 	let rawID = request.message[2]
 	let coachID = rawID.substring(3, rawID.length-1)
-	let coachObj = await client.fetchUser(coachID)
+	let coachObj = await global.discordClient.fetchUser(coachID)
 
 	coach = coachObj.username
 

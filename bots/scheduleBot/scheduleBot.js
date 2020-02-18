@@ -85,7 +85,7 @@ const lobby = async (request) => {
 	// let day = request.message[2].charAt(0).toUpperCase() + request.message[2].slice(1)
 	// let time = request.message[4] + ' ' + request.message[5]
 
-	// let lobby = await global.client.channels
+	// let lobby = await global.discordClient.channels
 	// let na_channel = ''
 
 	// for( let key of lobby.values() ){

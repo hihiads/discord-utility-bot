@@ -31,7 +31,7 @@ const hasPermission = (msgObj, role) => new Promise((resolve, reject) => {
 
 
 const sendMessage = (user, botMsg) => new Promise((resolve, reject) => {
-	botName = global.client.user.username
+	botName = global.discordClient.user.username
 
 	if (user.username === botName){
 		console.log('not responding to my own message!')
