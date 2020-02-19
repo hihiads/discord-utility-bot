@@ -1,6 +1,7 @@
 let { reviewBot } = require( './bots/reviewBot.js' )
 let { scheduleBot } = require( './bots/scheduleBot/scheduleBot.js' )
 let { setupBot } = require( './bots/setupBot.js' )
+let { helpBot } = require( './bots/helpBot.js' )
 let { startAgendaJobs } = require( './bots/scheduleBot/startAgendaJobs.js' )
 
 // spin up agenda to check for queued up scheduled jobs
@@ -80,7 +81,8 @@ discordClient.on( 'message', msg => {
 	const controller = new Map( [
 		['review', reviewBot], 
 		['schedule', scheduleBot],
-		['setup', setupBot]
+		['setup', setupBot],
+		['help', helpBot]
 	] )
 
 	if (controller.has( request.name ) != true) {
