@@ -95,7 +95,7 @@ const lobby = async (request) => {
 
 	let dateOfLobby = request.message.slice(2, request.message.length).join(' ')
 
-	let message = await na_channel.send( `We will be hosting a 5v5 lobby for beginners ${dateOfLobby} (${coachTimeZone})! \nSmash that  ✅  if you would like to participate. Also pick 2 positions you are comfortable playing using the reactions below. Thanks!\n\n- ${coachName}` )
+	let message = await na_channel.send( `We will be hosting a 5v5 lobby for beginners ${dateOfLobby} (${coachTimeZone})! \nSmash that  ✅  if you would like to participate. Also pick 2 positions you are comfortable playing using the reactions below. Thanks!` )
 	await message.react('✅')
 	await message.react( '1️⃣' )
 	await message.react( '2️⃣' )
