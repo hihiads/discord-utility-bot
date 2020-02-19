@@ -16,7 +16,7 @@ function getUserEpoch(message, userTimeZoneTZ){
 
 	dateObj = humanIntervalToDate(request)
 
-	return spacetime( dateObj, userTimeZoneTZ ).time( time ).goto('UTC').epoch
+	return spacetime( dateObj, userTimeZoneTZ ).time( time ).goto('Etc/UTC').epoch
 }
 
 
