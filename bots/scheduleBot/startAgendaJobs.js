@@ -61,11 +61,11 @@ function startAgendaJobs() {
 			let playerData = `
 
 
-players\t\t\t\t\t\t\t\t\t\tpositions
----------------------------------------------------------
+players\t\t\t\t\t\t\t\t\tpositions
+-------------------------------------------------
 `
 			for( i in players ){
-				playerData += players[i].name+"\t\t\t\t\t\t\t\t\t"
+				playerData += players[i].name+"\t\t\t\t\t\t\t\t"
 				for( j in players[i].positions ){
 					if( players[i].positions.length - 1 == j ){
 						playerData += players[i].positions[j] + '\n\n'
