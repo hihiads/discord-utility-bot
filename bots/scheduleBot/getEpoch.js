@@ -28,6 +28,14 @@ function getUserEpoch(message, userTimeZoneTZ){
 		day = spacetime().goto(userTimeZoneTZ).add(1,'day').dayName()
 	}
 
+	// check if in the past
+	let now = spacetime().goto(userTimeZoneTZ)
+	let userDate = spacetime().goto(userTimeZoneTZ).day(day).time(time)
+
+	if (userDate.isBefore(now)) {
+		return 'timeMachine'
+	}	
+
 	return spacetime().goto(userTimeZoneTZ).day(day).time(time).epoch
 }
 

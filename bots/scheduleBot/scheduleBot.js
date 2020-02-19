@@ -114,6 +114,11 @@ const lobby = async (request) => {
 		return 'user did not enter a valid timezone'
 	}
 
+	if ( epoch == 'timeMachine' ){
+		request.msgObj.reply("🚀 ⏰ Are you trying to travel back in time? You can't do that ⏰ 🚀")
+		return 'user tried to go back in time. How fucking stupid are these error checks amiright?'
+	}
+
 	let timestamp = new Date(epoch)
 	console.log(`timestamp: ${timestamp}`)
 
