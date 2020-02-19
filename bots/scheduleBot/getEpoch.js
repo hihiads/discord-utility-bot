@@ -14,9 +14,13 @@ function getUserEpoch(message, userTimeZoneTZ){
 	let request = message.split( ' ' ).slice( 2, 5 ).join( ' ' )
 	time = message.split( ' ' )[2]
 
-	dateObj = humanIntervalToDate(request)
+	date = humanIntervalToDate(request)
 
-	return spacetime( dateObj, userTimeZoneTZ ).time( time ).goto('Etc/UTC').epoch
+	d = spacetime(date, 'UTC')
+	d = d.time(time)
+	d = d.goto(userTimeZoneTZ)
+
+	return d.epoch
 }
 
 
