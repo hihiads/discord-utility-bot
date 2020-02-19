@@ -75,8 +75,33 @@ const lobby = async (request) => {
 	// search will return -1 if not found
 	if( time.search("am") == -1 && time.search("pm") == -1 )
 	{
-		request.msgObj.reply("Please try again! Don't forget to put am or pm at the end of your time! Otherwise it will schedule in the am only!\nExample: 8:30pm or 8pm")
+		request.msgObj.reply("Please try again! Don't forget to put am or pm at the end of your time! Example: 8pm or 12:30pm")
 		return 'user did not enter am or pm with time'
+	}
+
+
+	// make sure time is a number between 0-13
+	timeTest = /^[1-9]:[0-5][0-9][pa]m|^[1][0-2]:[0-5][0-9][pa]m/.test( time )
+	
+	if( timeTest == false ){
+		request.msgObj.reply("Please try again! 12 hour format only. Don't forget to put am or pm at the end of your time! Otherwise it will schedule in the am only!\nExample: 8:30pm or 8pm")
+		return 'user did not enter a valid time'
+	}
+
+	console.log( `timeTest: ${timeTest}` )
+
+
+	// make sure day is either day of the week or today/tomorrow
+	let dayTest = [
+	'monday', 'tuesday', 'wednesday', 'thursday', 
+	'friday', 'saturday', 'sunday', 'today', 'tomorrow'
+	]
+
+	let day = request.message[2]
+
+	if (dayTest.includes(day.toLowerCase()) == false) {
+		request.msgObj.reply("Please try again! <day> can be any day of the week. You can even say today or tomorrow!")
+		return 'user did not enter a valid day'
 	}
 
 
@@ -93,7 +118,7 @@ const lobby = async (request) => {
 	let na_channel = ''
 
 	for( let key of lobby.values() ){
-		if( key.name === 'bot-tests' )
+		if( key.name === 'general' )
 			na_channel = key
 	}
 
