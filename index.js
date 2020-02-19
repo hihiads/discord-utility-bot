@@ -54,6 +54,8 @@ discordClient.on( 'ready', msg => console.log( 'bot connected' ))
 
 // run main() when new messages detected on the server
 discordClient.on( 'message', msg => {
+	if (msg.author.bot) 
+		return
 	// check if we're being summoned and return the correct bot
 	// split up message into an array
 	const message =  msg.content.split( " " )
