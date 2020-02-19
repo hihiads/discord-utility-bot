@@ -13,11 +13,18 @@ function getUserEpoch(message, userTimeZoneTZ){
 
 	let request = message.split( ' ' ).slice( 2, 5 ).join( ' ' )
 	time = message.split( ' ' )[4]
-	console.log(time)
+	
+	day = message.split( ' ' )[2]
 
-	dateObj = humanIntervalToDate(request)
+	if (day.toLowerCase() == 'today') {
+		day = spacetime().goto(userTimeZoneTZ).dayName()
+	}
 
-	return spacetime( dateObj, userTimeZoneTZ ).time( time ).goto('Etc/UTC').epoch
+	if (day.toLowerCase() == 'tomorrow') {
+		day = spacetime().goto(userTimeZoneTZ).add(1,'day').dayName()
+	}
+
+	return spacetime().goto(userTimeZoneTZ).day(day).time(time).epoch
 }
 
 

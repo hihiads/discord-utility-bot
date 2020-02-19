@@ -12,7 +12,6 @@
   "license": "ISC",
   "dependencies": {
     "agenda": "^3.0.0",
-    "date.js": "^0.3.3",
     "discord.js": "^11.5.1",
     "googleapis": "43.0.0",
     "luxon": "^1.22.0",
