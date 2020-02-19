@@ -15,11 +15,18 @@ function getUserEpoch(message, userTimeZoneTZ){
 	time = message.split( ' ' )[2]
 
 	date = humanIntervalToDate(request)
+	console.log(`human date: ${date}`)
 
 	d = spacetime(date, 'UTC')
-	d = d.time(time)
-	d = d.goto(userTimeZoneTZ)
+	console.log(`spacetime d1: ${d}`)
 
+	d = d.time(time)
+	console.log(`d.time: ${d}`)
+
+	d = d.goto(userTimeZoneTZ)
+	console.log(`d.goto: ${d}`)
+
+	
 	return d.epoch
 }
 
