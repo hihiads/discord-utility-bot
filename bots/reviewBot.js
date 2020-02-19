@@ -111,6 +111,7 @@ const stats = async (request) => {
 
 const getScore = (sentMsgObj) => new Promise((resolve, reject) => {
 	const filter = m => (m.content > 0 && m.content < 11)
+	if(sentMsgObj.author.bot) return;
 	dmChannel = sentMsgObj.channel
 
 	resolve(dmChannel.awaitMessages(filter, { max: 1 }))
