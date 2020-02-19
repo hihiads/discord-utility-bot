@@ -115,8 +115,8 @@ const lobby = async (request) => {
 	}
 
 	if ( epoch == 'timeMachine' ){
-		request.msgObj.reply("🚀 ⏰ Are you trying to travel back in time? You can't do that ⏰ 🚀")
-		return 'user tried to go back in time. How fucking stupid are these error checks amiright?'
+		request.msgObj.reply("🚀 ⏰ Are you trying to travel back in time? Please try again ⏰ 🚀")
+		return 'user tried to go back in time'
 	}
 
 	let timestamp = new Date(epoch)
