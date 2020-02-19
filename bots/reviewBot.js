@@ -45,11 +45,18 @@ const reviewBot = async (request) => {
 const me = async (request) => {
 	// get name of coach
 	coach = request.msgObj.author.username
+	coachID = request.msgObj.author.id
+	console.log( `coachID: ${coachID}` )
+	console.log( request.msgObj)
 
 	// get student user object
 	let rawID = request.message[2]
-	let studentID = rawID.substring(3, rawID.length-1)
+	let studentID = rawID.replace( /<[^0-9]>/g, '' )
+	console.log( `\nrawID: ${rawID}\nstudentID: ${studentID}\n` )
 	let studentObj = await global.discordClient.fetchUser(studentID)
+	
+	console.log( `\nrawID: ${rawID}\nstudentID: ${studentID}\n` )
+	console.log( studentObj )
 
 	// student = studentObj.lastMessage.member.nickname
 	student = studentObj.username
