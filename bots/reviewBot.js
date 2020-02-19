@@ -1,4 +1,4 @@
-const {hasPermission, sendMessage} = require( '../helpers.js' )
+const {commandNotFound, hasPermission, sendMessage} = require( '../helpers.js' )
 const {getAuthToken, postSpreadSheetValues, getSpreadSheet} = require('../services/googleSheets.js');
 
 const spreadsheetId = '1uCkgD4sSi5-SBtuMQkIxa_NFCp36SJLO7b_97zf0M9A';
@@ -23,6 +23,10 @@ const reviewBot = async (request) => {
 		commands = {
 			'me': me,
 			'stats': stats
+		}
+
+		if (commandNotFound(request, commands)) {
+			return `user entered an invalid command: ${request.message}`
 		}
 
 		let response = commands[request.command](request)

@@ -30,6 +30,16 @@ const hasPermission = (msgObj, role) => new Promise((resolve, reject) => {
 
 
 
+const commandNotFound = (request, commands) => {
+	if (commands[request.command] === undefined){
+		request.msgObj.reply("sorry that is an invalid !command")
+		return true
+	}
+	return false
+}
+
+
+
 const sendMessage = (user, botMsg) => new Promise((resolve, reject) => {
 	botName = global.discordClient.user.username
 
@@ -50,4 +60,4 @@ const collectMessage = (sentMsgObj) => new Promise((resolve, reject) => {
 })
 
 
-module.exports = {hasPermission, sendMessage, collectMessage}
+module.exports = {hasPermission, sendMessage, collectMessage, commandNotFound}

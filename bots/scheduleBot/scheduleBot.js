@@ -4,7 +4,7 @@ const {
 } = require( './getEpoch.js' )
 
 
-const {hasPermission, sendMessage} = require( '../../helpers.js' )
+const {commandNotFound, hasPermission, sendMessage} = require( '../../helpers.js' )
 
 
 
@@ -23,6 +23,10 @@ const scheduleBot = async (request) => {
 	else {
 		commands = {
 			'lobby': lobby
+		}
+
+		if (commandNotFound(request, commands)) {
+			return `user entered an invalid command: ${request.message}`
 		}
 
 		let response = commands[request.command](request)
