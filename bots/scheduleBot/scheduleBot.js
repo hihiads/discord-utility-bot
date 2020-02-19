@@ -89,7 +89,7 @@ const lobby = async (request) => {
 	let na_channel = ''
 
 	for( let key of lobby.values() ){
-		if( key.name === 'bot-tests' )
+		if( key.name === 'na-announcements' )
 			na_channel = key
 	}
 

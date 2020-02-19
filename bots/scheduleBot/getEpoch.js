@@ -1,7 +1,6 @@
 function l(x) {return console.log(x)}
 
 const spacetime = require('spacetime')
-const humanIntervalToDate = require( 'date.js' )
 
 
 
