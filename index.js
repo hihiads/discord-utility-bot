@@ -83,7 +83,10 @@ discordClient.on( 'message', msg => {
 		['setup', setupBot]
 	] )
 
-
+	if (controller.has( request.name ) != true) {
+		request.msgObj.reply("sorry that is an invalid !command")
+		return `user entered an invalid command: ${request.name}`
+	}
 		let bot = controller.get(request.name)
 
 	

@@ -46,8 +46,6 @@ const me = async (request) => {
 	// get name of coach
 	coach = request.msgObj.author.username
 	coachID = request.msgObj.author.id
-	console.log( `coachID: ${coachID}` )
-	console.log( request.msgObj)
 
 	// get student user object
 	let rawID = request.message[2]
@@ -61,7 +59,21 @@ const me = async (request) => {
 	// ask for score & collect response
 	let sentMessage = await sendMessage(studentObj, botMsgs.score)
 	let scoreCollectedObj = await getScore(sentMessage)
+
+	// avoid duplicate calls to the bot
+	let lastMessageID = await scoreCollectedObj.first().channel.lastMessageID
+	let channel = await sentMessage.channel
+	lastMessage = await channel.fetchMessage(lastMessageID)
+
+	let now = Date.now()
+
+	if(lastMessage.author.bot && lastMessage.createdTimestamp > now - 10000){
+		console.log( 'bot duplicate request found' )
+		return
+	}
+
 	let score = scoreCollectedObj.first().content
+
 
 	// ask for comment & collect response
 	sentMessage = await sendMessage(studentObj, botMsgs.comment)
@@ -110,17 +122,16 @@ const stats = async (request) => {
 //-------------------
 
 const getScore = (sentMsgObj) => new Promise((resolve, reject) => {
-	const filter = m => (m.content > 0 && m.content < 11)
-	if(sentMsgObj.author.bot) return;
+	const filter = m => (m.content > 0 && m.content < 11 || m.author.bot)
 	dmChannel = sentMsgObj.channel
-
 	resolve(dmChannel.awaitMessages(filter, { max: 1 }))
 })
 
 
 
 const getComment = (sentMsgObj) => new Promise((resolve, reject) => {
-	const filter = m => (typeof m.content === 'string')
+	const filter = m => (typeof m.content === 'string' 
+		&& m.content != 'Hello! Please rate your lesson from 1 - 5 (5 being awesome)')
 	dmChannel = sentMsgObj.channel
 
 	resolve(dmChannel.awaitMessages(filter, { max: 1 }))
