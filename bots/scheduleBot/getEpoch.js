@@ -16,7 +16,12 @@ function getUserEpoch(message, userTimeZoneTZ){
 	day = message.split( ' ' )[2]
 
 	if (day.toLowerCase() == 'today') {
-		day = spacetime().goto(userTimeZoneTZ).dayName()
+		try{
+			day = spacetime().goto(userTimeZoneTZ).dayName()
+		}
+		catch{
+		 return false 
+		}
 	}
 
 	if (day.toLowerCase() == 'tomorrow') {

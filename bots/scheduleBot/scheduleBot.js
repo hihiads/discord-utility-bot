@@ -75,7 +75,7 @@ const lobby = async (request) => {
 	// search will return -1 if not found
 	if( time.search("am") == -1 && time.search("pm") == -1 )
 	{
-		request.msgObj.reply("Please try again! Don't forget to put am or pm at the end of your time! Example: 8pm or 12:30pm")
+		request.msgObj.reply("Please try again! Don't forget to put am or pm at the end of your time! Example: 8:00pm or 12:30pm")
 		return 'user did not enter am or pm with time'
 	}
 
@@ -84,7 +84,7 @@ const lobby = async (request) => {
 	timeTest = /^[1-9]:[0-5][0-9][pa]m|^[1][0-2]:[0-5][0-9][pa]m/.test( time )
 	
 	if( timeTest == false ){
-		request.msgObj.reply("Please try again! 12 hour format only. Don't forget to put am or pm at the end of your time! Otherwise it will schedule in the am only!\nExample: 8:30pm or 8pm")
+		request.msgObj.reply("Please try again! 12 hour 00:00 format only. Don't forget to put am or pm at the end of your time!\nExample: 8:00pm or 12:30pm")
 		return 'user did not enter a valid time'
 	}
 
@@ -108,6 +108,11 @@ const lobby = async (request) => {
 	// get the user epoch 
 	let epoch = getUserEpoch(request.msgObj.content, coachTimeZone)
 	console.log(`epoch: ${epoch}`)
+
+	if( epoch == false ){
+		request.msgObj.reply("whoops! Please use a valid timezone with !setup timezone")
+		return 'user did not enter a valid timezone'
+	}
 
 	let timestamp = new Date(epoch)
 	console.log(`timestamp: ${timestamp}`)
