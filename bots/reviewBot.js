@@ -51,12 +51,9 @@ const me = async (request) => {
 
 	// get student user object
 	let rawID = request.message[2]
-	let studentID = rawID.replace( /<[^0-9]>/g, '' )
+	let studentID = rawID.replace(/[^0-9]/g, '')
 	console.log( `\nrawID: ${rawID}\nstudentID: ${studentID}\n` )
 	let studentObj = await global.discordClient.fetchUser(studentID)
-	
-	console.log( `\nrawID: ${rawID}\nstudentID: ${studentID}\n` )
-	console.log( studentObj )
 
 	// student = studentObj.lastMessage.member.nickname
 	student = studentObj.username
