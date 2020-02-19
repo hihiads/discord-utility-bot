@@ -1,7 +1,6 @@
 function l(x) {return console.log(x)}
 
 const spacetime = require('spacetime')
-const humanIntervalToDate = require( 'date.js' )
 
 
 
@@ -12,21 +11,31 @@ function getUserEpoch(message, userTimeZoneTZ){
 	// message example !schedule lobby today at 3:00pm	
 
 	let request = message.split( ' ' ).slice( 2, 5 ).join( ' ' )
+
 	time = message.split( ' ' )[2]
 
-	date = humanIntervalToDate(request)
-	console.log(`human date: ${date}`)
+	day = message[0]
+	
 
-	d = spacetime(date, 'UTC')
-	console.log(`spacetime d1: ${d}`)
-
-	d = d.time(time)
-	console.log(`d.time: ${d}`)
-
+	d = spacetime.now()
+	
 	d = d.goto(userTimeZoneTZ)
-	console.log(`d.goto: ${d}`)
+
+	if (day.toLowerCase() == 'today') {
+		day = d.dayName()
+	}
+
+	if (day.toLowerCase() == 'tomorrow') {
+		day = d.add(1,'day').dayName()
+	}
 
 	
+	d = d.time(time)
+
+
+	d = d.day(day)
+
+
 	return d.epoch
 }
 
