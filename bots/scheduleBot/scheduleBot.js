@@ -96,6 +96,9 @@ const lobby = async (request) => {
 
 
 
+	// time checks
+	let time = request.message[4]
+
 	// make sure time is a number between 0-13
 	timeTest = /^[1-9]:[0-5][0-9][pa]m|^[1][0-2]:[0-5][0-9][pa]m/.test( time )
 	
@@ -110,7 +113,7 @@ const lobby = async (request) => {
 
 
 	// make sure the user added pm or am
-	let time = request.message[4]
+
 
 
 
