@@ -154,7 +154,7 @@ const lobby = async (request) => {
 	let na_channel = ''
 
 	for( let key of lobby.values() ){
-		if( key.name === 'general' )
+		if( key.name === 'find-the-bugs' )
 			na_channel = key
 	}
 
