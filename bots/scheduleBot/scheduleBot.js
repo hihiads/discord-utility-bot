@@ -104,6 +104,13 @@ const lobby = async (request) => {
 		return 'user did not enter a valid day'
 	}
 
+	// make sure user wrote didn't miss 'at' ( maybe this should be removed all together? )
+	let at = request.message[3].toLowerCase()
+	if (at != 'at') {
+		request.msgObj.reply("Please try again!\n\nCorrect format: <day> at <timeam/pm>\n\nExample: today at 8:00pm")
+		return "user forgot to put 'at' in the request"
+	}
+
 
 	// get the user epoch 
 	let epoch = getUserEpoch(request.msgObj.content, coachTimeZone)
