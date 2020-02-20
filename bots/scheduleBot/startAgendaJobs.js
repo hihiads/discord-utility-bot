@@ -35,7 +35,7 @@ function startAgendaJobs() {
 					// send them a message and tally up their reactions
 					let user = await global.discordClient.fetchUser( userID )
 					if( reaction == '✅' ){
-						user.send( 'Pssst! The lobby match will be starting in a few minutes. You can join the voice channel here: https://discord.gg/mJrRTe' )
+						user.send( 'Pssst! The lobby match will be starting in a few minutes. You can join the voice channel here: https://discord.gg/Hc7xAk' )
 					}
 
 					let playerFound = players.find( (element) => element.name == username ) 
