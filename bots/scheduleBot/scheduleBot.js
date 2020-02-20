@@ -67,28 +67,6 @@ const lobby = async (request) => {
 		return 'user needs to setup timezone'
 	}
 
-	// make sure the user added pm or am
-	let time = request.message[4]
-
-
-
-	// search will return -1 if not found
-	if( time.search("am") == -1 && time.search("pm") == -1 )
-	{
-		request.msgObj.reply("Please try again! Don't forget to put am or pm at the end of your time! Example: 8:00pm or 12:30pm")
-		return 'user did not enter am or pm with time'
-	}
-
-
-	// make sure time is a number between 0-13
-	timeTest = /^[1-9]:[0-5][0-9][pa]m|^[1][0-2]:[0-5][0-9][pa]m/.test( time )
-	
-	if( timeTest == false ){
-		request.msgObj.reply("Please try again! 12 hour 00:00 format only. Don't forget to put am or pm at the end of your time!\nExample: 8:00pm or 12:30pm")
-		return 'user did not enter a valid time'
-	}
-
-	console.log( `timeTest: ${timeTest}` )
 
 
 	// make sure day is either day of the week or today/tomorrow
@@ -104,12 +82,50 @@ const lobby = async (request) => {
 		return 'user did not enter a valid day'
 	}
 
+
+
+
 	// make sure user wrote didn't miss 'at' ( maybe this should be removed all together? )
 	let at = request.message[3].toLowerCase()
+
+	console.log( at )
 	if (at != 'at') {
-		request.msgObj.reply("Please try again!\n\nCorrect format: <day> at <timeam/pm>\n\nExample: today at 8:00pm")
+		request.msgObj.reply("Please try again!\n\nCorrect format:\n\n!schedule lobby <day> at <timeam/pm>\n\nExample:\n\n!schedule lobby today at 8:00pm\n\nYou can say today, tomorrow or any day of the week")
 		return "user forgot to put 'at' in the request"
 	}
+
+
+
+	// make sure time is a number between 0-13
+	timeTest = /^[1-9]:[0-5][0-9][pa]m|^[1][0-2]:[0-5][0-9][pa]m/.test( time )
+	
+	if( timeTest == false ){
+		request.msgObj.reply("Please try again! 12 hour 00:00 format only. Don't forget to put am or pm at the end of your time!\nExample: 8:00pm or 12:30pm")
+		return 'user did not enter a valid time'
+	}
+
+	console.log( `timeTest: ${timeTest}` )
+
+
+
+
+	// make sure the user added pm or am
+	let time = request.message[4]
+
+
+
+	// search will return -1 if not found
+	if( time.search("am") == -1 && time.search("pm") == -1 )
+	{
+		request.msgObj.reply("Please try again! Don't forget to put am or pm at the end of your time! Example: 8:00pm or 12:30pm")
+		return 'user did not enter am or pm with time'
+	}
+
+
+
+
+
+
 
 
 	// get the user epoch 
