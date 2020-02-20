@@ -49,7 +49,13 @@ global.Discord = require('discord.js')
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN
 global.discordClient = new Discord.Client()
 discordClient.login(DISCORD_TOKEN)
-discordClient.on( 'ready', msg => console.log( 'bot connected' ))
+discordClient.on( 'ready', msg => {
+	console.log( 'bot connected' )
+
+	// test = discordClient.guilds.first().createChannel(
+	// 	'test', {type: 'voice'}
+	// 	).then((response) => response.setParent('669667301632507920'))
+})
 
 
 
