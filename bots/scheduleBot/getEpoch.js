@@ -30,7 +30,7 @@ function getUserEpoch(message, userTimeZoneTZ){
 
 	// check if in the past
 	let s = spacetime.now()
-	s = s.weekStart(day)
+	s = s.weekStart(s.now().subtract(1,'day'))
 
 	let now = s.goto(userTimeZoneTZ)
 	let userDate = s.goto(userTimeZoneTZ).day(day).time(time)
