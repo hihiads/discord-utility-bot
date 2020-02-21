@@ -32,14 +32,14 @@ function getUserEpoch(message, userTimeZoneTZ){
 	let s = spacetime.now()
 	s = s.weekStart(day)
 
-	let now = spacetime().goto(userTimeZoneTZ)
-	let userDate = spacetime().goto(userTimeZoneTZ).day(day).time(time)
+	let now = s.goto(userTimeZoneTZ)
+	let userDate = s.goto(userTimeZoneTZ).day(day).time(time)
 
 	if (userDate.isBefore(now)) {
 		return 'timeMachine'
 	}	
 
-	return spacetime().goto(userTimeZoneTZ).day(day).time(time).epoch
+	return s.goto(userTimeZoneTZ).day(day).time(time).epoch
 }
 
 
