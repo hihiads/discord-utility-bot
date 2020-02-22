@@ -4,6 +4,8 @@ const helpBot = async (request) => {
 
 	let userHasPermission = await hasPermission(request.msgObj, 'coach')
 
+
+
 	if ( !userHasPermission ){
 		return 'user does not have persmission to use the bot'
 	}
@@ -12,11 +14,17 @@ const helpBot = async (request) => {
 			'me': me
 		}
 
+
+
 		if (commandNotFound(request, commands)) {
 			return `user entered an invalid command: ${request.message}`
 		}
 
+
+
 		let response = commands[request.command](request)
+
+
 		
 		return response
 	}
@@ -33,7 +41,7 @@ const me = async (request) => {
 
 	const helpMessage = {
 		color: 0x0099ff,
-		title: 'DFZ bot - A general purpose test bot to make Xalnara happy',
+		title: 'DFZ bot - A general purpose dev bot to make the developers happy',
 		description: "```\nAvailable Commands:\n\n!review me <name>\n\n!schedule lobby <day> at <timeam/pm>\n\n!setup timezone\n\n!help me```",
 		thumbnail: {
 			url: 'http://getdrawings.com/free-icon/robot-icon-png-57.png',

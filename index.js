@@ -63,6 +63,9 @@ discordClient.on( 'ready', msg => {
 
 // run main() when new messages detected on the server
 discordClient.on( 'message', msg => {
+
+
+
 	if(msg.author.bot) return;
 	// check if we're being summoned and return the correct bot
 	// split up message into an array
@@ -85,6 +88,8 @@ discordClient.on( 'message', msg => {
 		'message': message,
 		'msgObj': msg
 	}
+
+
 
 	const controller = new Map( [
 		['review', reviewBot], 
