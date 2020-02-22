@@ -1,8 +1,8 @@
 const {commandNotFound, hasPermission, sendMessage} = require( '../helpers.js' )
 const {getAuthToken, postSpreadSheetValues, getSpreadSheet} = require('../services/googleSheets.js');
 
-const spreadsheetId = '1uCkgD4sSi5-SBtuMQkIxa_NFCp36SJLO7b_97zf0M9A';
-const sheetName = 'reviews';
+const spreadsheetId = process.env.GOOGLE_SHEET_ID
+const sheetName = 'reviews'
 
 
 const botMsgs = {
@@ -46,7 +46,6 @@ const me = async (request) => {
 	// get name of coach
 	coach = request.msgObj.author.username
 	coachID = request.msgObj.author.id
-	console.log( coachID )
 
 	// get student user object
 	let rawID = request.message[2]
