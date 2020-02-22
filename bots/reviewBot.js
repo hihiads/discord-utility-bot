@@ -46,6 +46,7 @@ const me = async (request) => {
 	// get name of coach
 	coach = request.msgObj.author.username
 	coachID = request.msgObj.author.id
+	console.log( coachID )
 
 	// get student user object
 	let rawID = request.message[2]
