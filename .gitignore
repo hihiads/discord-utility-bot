@@ -1,4 +1,5 @@
 # Logs
+.DS_Store
 gCreds.json
 scratch.js
 logs
