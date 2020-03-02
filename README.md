@@ -1,3 +1,5 @@
+[![Run on Repl.it](https://repl.it/badge/github/sojohnnysaid/discord-utility-bot)](https://repl.it/github/sojohnnysaid/discord-utility-bot)
+
 To get the bot running, type in the terminal:
 
 npm install
@@ -26,3 +28,4 @@ now while you are coding, everytime you save
 your file the bot will restart automatically, so you can test your changes on the discord server without having to type node index.js everytime you want to try something new.
 
 Have fun!
+
