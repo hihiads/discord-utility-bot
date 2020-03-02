@@ -1,3 +1,4 @@
+require('dotenv').config()
 let { reviewBot } = require( './bots/reviewBot.js' )
 let { scheduleBot } = require( './bots/scheduleBot/scheduleBot.js' )
 let { setupBot } = require( './bots/setupBot.js' )
