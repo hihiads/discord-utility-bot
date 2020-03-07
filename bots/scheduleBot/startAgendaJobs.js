@@ -21,6 +21,11 @@ function startAgendaJobs() {
 			let reactionsArray = await Array.from( reactionsCollection )
 
 			let players = []
+
+
+			guild = await discordClient.guilds.first()
+			channel = await guild.channels.find( channel => channel.name === "General" )
+			invite = await channel.createInvite()
 			
 			for( i in reactionsArray ) { 
 				let reaction = reactionsArray[i][0]
@@ -28,14 +33,15 @@ function startAgendaJobs() {
 				for( j in users ) { 
 					let userID = users[j][0]
 					let username = users[j][1].username
-					if( username == 'nori-bot' ) {
+					if( username == 'DotaFromZero dev' ) {
 						continue
 					}
 
 					// send them a message and tally up their reactions
 					let user = await global.discordClient.fetchUser( userID )
+
 					if( reaction == '✅' ){
-						user.send( 'Pssst! The lobby match will be starting in a few minutes. You can join the voice channel here: https://discord.gg/cu2bK3' )
+						user.send( `Pssst! The lobby match will be starting in a few minutes. You can join the voice channel here: https://discord.gg/${invite.code}` )
 					}
 
 					let playerFound = players.find( (element) => element.name == username ) 
