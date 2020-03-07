@@ -1,7 +1,5 @@
 function l(x) {return console.log(x)}
-
 const spacetime = require('spacetime')
-require('spacetime-week')
 
 
 
@@ -9,48 +7,40 @@ require('spacetime-week')
 
 function getUserEpoch(message, userTimeZoneTZ){	
 
-	// message example !schedule lobby today at 3:00pm	
-
-
-	let s = spacetime.now()
-
 	let request = message.split( ' ' ).slice( 2, 5 ).join( ' ' )
 
-	day = message.split( ' ' )[2]
-	time = message.split( ' ' )[4]
+	lobbyDay = message.split( ' ' )[2]
+	lobbyTime = message.split( ' ' )[4]
 
-	if (day.toLowerCase() == 'today') {
-		try{
-			day = spacetime().goto(userTimeZoneTZ).dayName()
-		}
-		catch(e){
-		 return e 
-		}
-	}else if (day.toLowerCase() == 'tomorrow') {
-		day = spacetime().goto(userTimeZoneTZ).add(1,'day').dayName()
-	} else{
-		day = day.toLowerCase()
-		s = s.weekStart( day )
-		s = s.endOf('week')
+	// convert am/pm to lowercase
+	let timeArray = lobbyTime.split('')
+	timeArray[timeArray.length-1] = timeArray[timeArray.length-1].toLowerCase()
+	timeArray[timeArray.length-2] = timeArray[timeArray.length-2].toLowerCase()
+	lobbyTime = timeArray.join('')
+
+	userCurrentDate = spacetime
+		.now()
+		.goto( userTimeZoneTZ )
+
+
+	lobbyDate = spacetime
+		.now()
+		.goto( userTimeZoneTZ )
+		.weekStart( spacetime.now().goto(userTimeZoneTZ).dayName() )
+		.endOf( 'week' )
+		.day( lobbyDay )
+		.time( lobbyTime )
+
+
+
+	if( lobbyDate.isBefore( userCurrentDate ) ){
+		return 'timeMachine'
 	}
 
-	// check if in the past
-	let now = s.goto(userTimeZoneTZ).weekStart( day )
-	let userDate = s.goto(userTimeZoneTZ).weekStart(day).day(day).time(time)
+	l( `lobby date epoch: ${lobbyDate.epoch}` )
 
-	console.log( `now: ${now}` )
-	console.log( `userDate: ${userDate}` )
-
-	if (userDate.isBefore(now)) {
-		return 'timeMachine'
-	}	
-
-	return s.goto(userTimeZoneTZ).weekStart(day).day(day).time(time).epoch
+	return lobbyDate.epoch
 }
-
-
-
-
 
 module.exports = {
 	getUserEpoch

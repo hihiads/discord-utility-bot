@@ -100,6 +100,7 @@ const lobby = async (request) => {
 	// time checks
 	let time = request.message[4]
 
+
 	// make sure time is a number between 0-13
 	timeTest = /^[1-9]:[0-5][0-9][paPA][mM]|^[1][0-2]:[0-5][0-9][paPA][mM]/.test( time )
 	
@@ -108,12 +109,12 @@ const lobby = async (request) => {
 		return 'user did not enter a valid time'
 	}
 
-	console.log( `timeTest: ${timeTest}` )
-
+	console.log( `time validated successfully` )
+	console.log(`getting lobby date epoch...`)
 
 	// get the user epoch 
 	let epoch = getUserEpoch(request.msgObj.content, coachTimeZone)
-	console.log(`epoch: ${epoch}`)
+	
 
 	if( epoch == false ){
 		request.msgObj.reply("whoops! Please use a valid timezone with !setup timezone")
