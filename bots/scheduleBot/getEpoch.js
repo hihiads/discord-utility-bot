@@ -29,13 +29,17 @@ function getUserEpoch(message, userTimeZoneTZ){
 	}else if (day.toLowerCase() == 'tomorrow') {
 		day = spacetime().goto(userTimeZoneTZ).add(1,'day').dayName()
 	} else{
-		s = s.weekStart( day.toLowerCase() )
+		day = day.toLowerCase()
+		s = s.weekStart( day )
 		s = s.endOf('week')
 	}
 
 	// check if in the past
-	let now = s.goto(userTimeZoneTZ)
+	let now = s.goto(userTimeZoneTZ).weekStart( day )
 	let userDate = s.goto(userTimeZoneTZ).day(day).time(time)
+
+	console.log( `now: ${now}` )
+	console.log( `userDate: ${userDate}` )
 
 	if (userDate.isBefore(now)) {
 		return 'timeMachine'
