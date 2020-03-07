@@ -52,7 +52,7 @@ const me = async (request) => {
 	};
 
 	request.msgObj.reply({ embed: helpMessage });
-	return
+	return 'help message sent'
 
 }
 
