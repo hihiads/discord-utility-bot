@@ -3,6 +3,7 @@
 
 First create a .env file with the following:
 
+
 DISCORD_TOKEN='your bot token'
 
 GCLOUD_PROJECT='google api project name'
@@ -17,7 +18,10 @@ REDISCLOUD_URL='your redis cloud uri (I use heroku resources for this)'
 
 
 
+
 To get the bot running, type in the terminal:
+
+
 
 npm install
 
