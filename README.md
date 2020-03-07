@@ -2,6 +2,7 @@
 
 
 First create a .env file with the following:
+
 DISCORD_TOKEN='your bot token'
 
 GCLOUD_PROJECT='google api project name'
