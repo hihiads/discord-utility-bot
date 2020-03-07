@@ -17,6 +17,7 @@
     "googleapis": "43.0.0",
     "luxon": "^1.22.0",
     "redis": "^3.0.2",
-    "spacetime": "^6.4.1"
+    "spacetime": "^6.4.1",
+    "spacetime-week": "0.0.1"
   }
 }
