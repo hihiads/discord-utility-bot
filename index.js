@@ -1,5 +1,4 @@
 require('dotenv').config()
-let { reviewBot } = require( './bots/reviewBot.js' )
 let { scheduleBot } = require( './bots/scheduleBot/scheduleBot.js' )
 let { setupBot } = require( './bots/setupBot.js' )
 let { helpBot } = require( './bots/helpBot.js' )
@@ -49,15 +48,15 @@ getAsync = promisify(redisClient.get).bind(redisClient)
 
 // connect to discord
 global.Discord = require('discord.js')
-const DISCORD_TOKEN = process.env.DISCORD_TOKEN
 global.discordClient = new Discord.Client()
+
+
+const DISCORD_TOKEN = process.env.DISCORD_TOKEN
 discordClient.login(DISCORD_TOKEN)
+
+
 discordClient.on( 'ready', msg => {
 	console.log( 'bot connected' )
-
-	// test = discordClient.guilds.first().createChannel(
-	// 	'test', {type: 'voice'}
-	// 	).then((response) => response.setParent('669667301632507920'))
 })
 
 
@@ -93,7 +92,6 @@ discordClient.on( 'message', msg => {
 
 
 	const controller = new Map( [
-		['review', reviewBot], 
 		['schedule', scheduleBot],
 		['setup', setupBot],
 		['help', helpBot]
