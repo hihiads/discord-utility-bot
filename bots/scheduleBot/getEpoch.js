@@ -36,7 +36,7 @@ function getUserEpoch(message, userTimeZoneTZ){
 
 	// check if in the past
 	let now = s.goto(userTimeZoneTZ).weekStart( day )
-	let userDate = s.goto(userTimeZoneTZ).day(day).time(time)
+	let userDate = s.goto(userTimeZoneTZ)weekStart(day).day(day).time(time)
 
 	console.log( `now: ${now}` )
 	console.log( `userDate: ${userDate}` )
@@ -45,7 +45,7 @@ function getUserEpoch(message, userTimeZoneTZ){
 		return 'timeMachine'
 	}	
 
-	return s.goto(userTimeZoneTZ).day(day).time(time).epoch
+	return s.goto(userTimeZoneTZ).weekStart(day).day(day).time(time).epoch
 }
 
 
