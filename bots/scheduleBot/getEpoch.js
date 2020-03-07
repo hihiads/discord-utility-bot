@@ -1,6 +1,7 @@
 function l(x) {return console.log(x)}
 
 const spacetime = require('spacetime')
+require('spacetime-week')
 
 
 
@@ -10,28 +11,29 @@ function getUserEpoch(message, userTimeZoneTZ){
 
 	// message example !schedule lobby today at 3:00pm	
 
+
+	let s = spacetime.now()
+
 	let request = message.split( ' ' ).slice( 2, 5 ).join( ' ' )
-	time = message.split( ' ' )[4]
-	
+
 	day = message.split( ' ' )[2]
+	time = message.split( ' ' )[4]
 
 	if (day.toLowerCase() == 'today') {
 		try{
 			day = spacetime().goto(userTimeZoneTZ).dayName()
 		}
-		catch{
-		 return false 
+		catch(e){
+		 return e 
 		}
-	}
-
-	if (day.toLowerCase() == 'tomorrow') {
+	}else if (day.toLowerCase() == 'tomorrow') {
 		day = spacetime().goto(userTimeZoneTZ).add(1,'day').dayName()
+	} else{
+		s = s.weekStart( day.toLowerCase() )
+		s = s.endOf('week')
 	}
 
 	// check if in the past
-	let s = spacetime.now()
-	//s = s.weekStart(s.subtract(1,'day')) to fix this so it's always set to the day before
-
 	let now = s.goto(userTimeZoneTZ)
 	let userDate = s.goto(userTimeZoneTZ).day(day).time(time)
 

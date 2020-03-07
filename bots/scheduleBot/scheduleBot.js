@@ -101,7 +101,7 @@ const lobby = async (request) => {
 	let time = request.message[4]
 
 	// make sure time is a number between 0-13
-	timeTest = /^[1-9]:[0-5][0-9][pa]m|^[1][0-2]:[0-5][0-9][pa]m/.test( time )
+	timeTest = /^[1-9]:[0-5][0-9][paPA][mM]|^[1][0-2]:[0-5][0-9][paPA][mM]/.test( time )
 	
 	if( timeTest == false ){
 		request.msgObj.reply("Please try again! 12 hour 00:00 format only. Don't forget to put am or pm at the end of your time!\nExample: 8:00pm or 12:30pm")
@@ -109,27 +109,6 @@ const lobby = async (request) => {
 	}
 
 	console.log( `timeTest: ${timeTest}` )
-
-
-
-
-	// make sure the user added pm or am
-
-
-
-
-	// search will return -1 if not found
-	if( time.search("am") == -1 && time.search("pm") == -1 )
-	{
-		request.msgObj.reply("Please try again! Don't forget to put am or pm at the end of your time! Example: 8:00pm or 12:30pm")
-		return 'user did not enter am or pm with time'
-	}
-
-
-
-
-
-
 
 
 	// get the user epoch 
@@ -155,7 +134,7 @@ const lobby = async (request) => {
 	let na_channel = ''
 
 	for( let key of lobby.values() ){
-		if( key.name === 'find-the-bugs' )
+		if( key.name === 'my-tests' )
 			na_channel = key
 	}
 
