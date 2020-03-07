@@ -11,7 +11,7 @@ const helpBot = async (request) => {
 	}
 	else {
 		commands = {
-			'me': me
+			'help': me
 		}
 
 
