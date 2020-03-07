@@ -33,7 +33,8 @@ function startAgendaJobs() {
 				for( j in users ) { 
 					let userID = users[j][0]
 					let username = users[j][1].username
-					if( username == 'DotaFromZero production' ) {
+
+					if( username == 'DotaFromZero' ) {
 						continue
 					}
 
