@@ -11,7 +11,7 @@ const helpBot = async (request) => {
 	}
 	else {
 		commands = {
-			'me': me
+			'help': me
 		}
 
 
@@ -42,7 +42,7 @@ const me = async (request) => {
 	const helpMessage = {
 		color: 0x0099ff,
 		title: 'DFZ bot - A general purpose dev bot that makes Xalnara happy',
-		description: "```\nAvailable Commands:\n\n!schedule lobby <day> at <timeam/pm>\n\n!setup timezone\n\n!help me```",
+		description: "```\nAvailable Commands:\n\n!schedule lobby <day> at <timeam/pm>\n\n!setup timezone\n\n!dfz help```",
 		thumbnail: {
 			url: 'http://getdrawings.com/free-icon/robot-icon-png-57.png',
 		},
