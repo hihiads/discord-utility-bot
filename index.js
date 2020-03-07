@@ -94,7 +94,7 @@ discordClient.on( 'message', msg => {
 	const controller = new Map( [
 		['schedule', scheduleBot],
 		['setup', setupBot],
-		['dfz help', helpBot]
+		['dfz', helpBot]
 	] )
 
 	if (controller.has( request.name ) != true) {
