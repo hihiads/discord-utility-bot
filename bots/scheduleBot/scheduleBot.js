@@ -16,7 +16,7 @@ const botMsgs = {
 
 const scheduleBot = async (request) => {
 
-	let userHasPermission = await hasPermission(request.msgObj, 'coach')
+	let userHasPermission = await hasPermission(request.msgObj, 'Coach')
 
 	if ( !userHasPermission ){
 		return 'user does not have persmission to use the bot'
