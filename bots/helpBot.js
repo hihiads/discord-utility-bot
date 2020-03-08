@@ -2,7 +2,7 @@ const {commandNotFound, hasPermission, sendMessage} = require( '../helpers.js' )
 
 const helpBot = async (request) => {
 
-	let userHasPermission = await hasPermission(request.msgObj, 'coach')
+	let userHasPermission = await hasPermission(request.msgObj, 'Coach')
 
 
 
