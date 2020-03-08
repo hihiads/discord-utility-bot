@@ -9,7 +9,7 @@ function getUserEpoch(message, userTimeZoneTZ){
 
 	let request = message.split( ' ' ).slice( 2, 5 ).join( ' ' )
 
-	lobbyDay = message.split( ' ' )[2]
+	lobbyDay = message.split( ' ' )[2].toLowerCase()
 	lobbyTime = message.split( ' ' )[4]
 
 	// convert am/pm to lowercase
@@ -22,16 +22,27 @@ function getUserEpoch(message, userTimeZoneTZ){
 		.now()
 		.goto( userTimeZoneTZ )
 
+  if(lobbyDay == 'today'){
+    lobbyDay = userCurrentDate.dayName()
+  }
+
 
 	lobbyDate = spacetime
 		.now()
 		.goto( userTimeZoneTZ )
-		.weekStart( spacetime.now().goto(userTimeZoneTZ).dayName() )
+		.weekStart( 'today' )
 		.endOf( 'week' )
 		.day( lobbyDay )
 		.time( lobbyTime )
 
+  console.log(lobbyDate)
 
+
+  days = ['today', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+  if ( days.includes(lobbyDay) == false )
+  {
+    return false
+  }
 
 	if( lobbyDate.isBefore( userCurrentDate ) ){
 		return 'timeMachine'
