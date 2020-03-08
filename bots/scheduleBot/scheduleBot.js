@@ -73,13 +73,13 @@ const lobby = async (request) => {
 	// make sure day is either day of the week or today/tomorrow
 	let dayTest = [
 	'monday', 'tuesday', 'wednesday', 'thursday', 
-	'friday', 'saturday', 'sunday', 'today', 'tomorrow'
+	'friday', 'saturday', 'sunday', 'today'
 	]
 
 	let day = request.message[2]
 
 	if (dayTest.includes(day.toLowerCase()) == false) {
-		request.msgObj.reply("Please try again! <day> can be any day of the week. You can even say today or tomorrow!")
+		request.msgObj.reply("Please try again! <day> can be any day of the week. Use 'today' if you are scheduling a match today")
 		return 'user did not enter a valid day'
 	}
 
@@ -125,6 +125,11 @@ const lobby = async (request) => {
 		request.msgObj.reply("🚀 ⏰ Are you trying to travel back in time? Please try again ⏰ 🚀")
 		return 'user tried to go back in time'
 	}
+
+  if ( epoch == 'incorrect day' ){
+    request.msgObj.reply("please use 'today' for today or the day of the week you want to schedule a match. You schedule up to one week in advance.")
+		return 'user entered incorrect day name'
+  }
 
 	let timestamp = new Date(epoch)
 	console.log(`timestamp: ${timestamp}`)
