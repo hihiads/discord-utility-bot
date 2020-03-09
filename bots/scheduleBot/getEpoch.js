@@ -31,7 +31,6 @@ function getUserEpoch(message, userTimeZoneTZ){
 		.now()
 		.goto( userTimeZoneTZ )
 		.weekStart( 'today' )
-		.endOf( 'week' )
 		.day( lobbyDay )
 		.time( lobbyTime )
 
