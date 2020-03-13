@@ -1,23 +1,30 @@
-require('dotenv').config() // environment variables
+require('dotenv').config() // load environment variables into process.env
+require('./helpers') // helper functions
 
-const Discord = require('discord.js') // Discord docs: https://bit.ly/39LYhac
-const Client = new Discord.Client()
+// START GLOBALS
+//-------------------------------------------------------------------------------------
+Discord = require('discord.js') // Discord docs: https://bit.ly/39LYhac
+Client = new Discord.Client()
+//-------------------------------------------------------------------------------------
+// END GLOBALS//-------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------
 
 
+
+
+// START ENTRY POINT
+//-------------------------------------------------------------------------------------
 // login to the DotaFromZero Discord as the bot
-// when we run the login method, it will emit the 'ready' event
-// we can pretend it is connected by forcing the Client to emit
-// a 'ready' message which it will listen for in the 'on' method
-
-Client.on('ready', response => { // listening for the Client to emit 'ready'
-  console.log('bot connected')
-})
-
-// forcing the client to emit a 'ready' message
-// Client.emit('ready')
-
-
-// connect to discord
+// login method returns a promise so we can use .then and .catch
 Client.login(process.env.DISCORD_TOKEN)
+  .then(
+    require('./controller.js') // handle messages in our controller
+  )
+  .catch( error => 
+    logError(error)
+  )
 
-
+Client.on('ready', () => logSuccess('Success! Bot connected\n')) // listen for when bot logs in
+//-------------------------------------------------------------------------------------
+//END ENTRY POINT----------------------------------------------------------------------
+//-------------------------------------------------------------------------------------
