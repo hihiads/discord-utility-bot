@@ -8,12 +8,12 @@ PURPLE='\033[0;35m'
 // log pretty error message
 logError = error =>
   console.log(
-    `${RED}error at file:\n${WHITE}${
+    `${RED}error path:\n${WHITE}${
       error
         .stack
         .split('\n')[1]
         .trim()
-        .replace('at route (', '')
+        .replace('(', '')
         .replace(')', '')}\n\n${RED}error message:\n${WHITE}${error.message
       }\n`
   )
