@@ -4,6 +4,7 @@ GREEN='\033[0;32m'
 WHITE='\033[1;37m'
 PURPLE='\033[0;35m'
 
+
 // log pretty error message
 logError = error =>
   console.log(
@@ -22,6 +23,14 @@ logError = error =>
 logSuccess = message => console.log(`${GREEN}Success! ${WHITE}${message}`)
 
 
+// check if users message a normal chat message not a bot command
+notACommand = message => {
+    if (message.content.split(" ")[0] != PREFIX)
+      return true
+  }
+
+
+// remove prefix and options leaving only the bot command
 getCommand = message => message
   .content
   .replace("!dfz ","")
