@@ -1,9 +1,9 @@
 scheduleBot = async (message) => {
-
   await postAnnouncement(message, '680108846466859078')
-  
   return 'Lobby posted'
 }
+
+
 
 
 postAnnouncement = async (message, channelID) => {
@@ -28,7 +28,6 @@ postAnnouncement = async (message, channelID) => {
   const userIcon = message.author.avatarURL
 
 
-
   // create our embed object and send the message to the NA announcements channel
   const lobbyEmbed = createLobbyEmbed(date, time, timezone, userNickname, userIcon)
   
@@ -40,17 +39,25 @@ postAnnouncement = async (message, channelID) => {
     .channels
     .get(channelID)
     .send(lobbyMessage,{ embed: lobbyEmbed })
-	
-  // react to message with join +/- buttons
+
+
+  // create reactions
   await message.react('✅')
+  await message.react('1️⃣')
+	await message.react('2️⃣')
+	await message.react('3️⃣')
+	await message.react('4️⃣')
+	await message.react('5️⃣')
 
   return 'lobby match posted to na-announcements\n'
 }
 
 
+
+
 // create our lobby match announcement embed message
 const createLobbyEmbed = (date, time, timezone, userNickname, userIcon) => {
-    return { 
+  return { 
       color: "10669055",
       title: `NA Lobby Match ${date}`, // example: Saturday 3/15/20
       description: `@ ${time} ${timezone}\n\nPosted By: ${userNickname}`, // 9:00pm America/New_York
@@ -87,7 +94,39 @@ const createLobbyEmbed = (date, time, timezone, userNickname, userIcon) => {
       url: "https://seeklogo.com/images/D/dota-2-logo-556BDCC022-seeklogo.com.png"
       },
       footer: {
-      text: "Smash the ✅ if you would like to participate"
-    }
+      text: "Smash the  ✅  if you would like to participate.\nPick any positions you are comfortable playing\nusing the reactions below"
     }
   }
+}
+
+
+
+// Listen for reaction add or remove events
+//-------------------------------------------------------------------------------------
+
+Client.on('messageReactionAdd', reactionMessage => {
+  const users = reactionMessage.users
+  const players = updatePlayers(users)
+})
+
+Client.on('messageReactionRemove', reactionMessage => {
+  console.log('reaction removed!')
+})
+
+
+
+// Create and update the players object
+//-------------------------------------------------------------------------------------
+updatePlayers = (users) => {
+
+  let players = {}
+
+  let username = ''
+  let role = ''
+  let position = ''
+
+  users.forEach((user) => {
+
+  })
+
+}

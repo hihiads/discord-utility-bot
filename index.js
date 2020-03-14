@@ -1,14 +1,6 @@
 // load environment variables
 require('dotenv').config() // load environment variables into process.env
 
-// load helpers
-require('./helpers') // helper functions
-
-// load bots
-require('./bots/helpBot')
-require('./bots/scheduleBot')
-
-
 
 // GLOBALS
 //-------------------------------------------------------------------------------------
@@ -17,8 +9,16 @@ Client = new Discord.Client()
 
 PREFIX = "!dfz" // our command prefix
 //-------------------------------------------------------------------------------------
-// END GLOBALS//-------------------------------------------------------------------------------------
+// END GLOBALS//-----------------------------------------------------------------------
 //-------------------------------------------------------------------------------------
+
+
+// load helpers
+require('./helpers') // helper functions
+
+// load bots
+require('./bots/helpBot')
+require('./bots/scheduleBot')
 
 
 

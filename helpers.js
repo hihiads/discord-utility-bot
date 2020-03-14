@@ -54,3 +54,12 @@ getNickname = message => {
 
   return nickname 
 }
+
+
+// get user's role
+getRole = reactionMessage => reactionMessage
+  .message
+  .member
+  .guild
+  .roles
+  .find(role => role.name === 'Coach') // if not found null
