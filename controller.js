@@ -10,11 +10,14 @@ const bots = {
 // listen for messages on the server
 // when someone sends a message
 // run the route method
-Client.on('message', message => 
-  message.content[0] != '!' ? '' : route(message)
-  .then(response => logSuccess(response))
-  .catch(error => logError(error))
-)
+Client.on('message', message => {
+  if (notACommand(message))
+    return
+  else
+    route(message)
+    .then(response => logSuccess(response))
+    .catch(error => logError(error))
+})
 
 
 // guard against messages coming from the bot itself
@@ -25,7 +28,6 @@ let command;
 const route = async message => {
   command = validateCommand(message)
   return bots[command](message)
-  
 }
 
 
