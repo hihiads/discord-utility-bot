@@ -1,5 +1,10 @@
+let embedMessage = {}
+
+
+
 scheduleBot = async (message) => {
-  await postAnnouncement(message, '680108846466859078')
+  announcementMessage = await postAnnouncement(message, NA_ANNOUNCEMENTS_ID)
+  await createReactions(announcementMessage)
   return 'Lobby posted'
 }
 
@@ -7,47 +12,13 @@ scheduleBot = async (message) => {
 
 
 postAnnouncement = async (message, channelID) => {
-
-  const arguments = stringToArray(message)
-
-  const date = arguments[2]
-  const time = arguments[3]
-  const timezone = arguments[4]
+  const lobbyMessage = createLobbyMessage(message)
+  embedMessage = createEmbedMessage(message)
   
-  const lobbyType = arguments[5]
-  const tierOneID = "<@&688288121938378783>"
-  const tierTwoID = "<@&688288282211123211>"
-  const tierThreeID = "<@&688288303115796486>" 
-  const lobbyTypes = {
-    open: `OPEN LOBBY MATCH\n${tierOneID}${tierTwoID}${tierThreeID}`,
-    meme: `🧐 MEME TEAM SATURDAY 🧐\n${tierOneID}${tierTwoID}${tierThreeID}`
-  }
-  let lobbyMessage = ''
-
-  const userNickname = getNickname(message)
-  const userIcon = message.author.avatarURL
-
-
-  // create our embed object and send the message to the NA announcements channel
-  const lobbyEmbed = createLobbyEmbed(date, time, timezone, userNickname, userIcon)
-  
-  if (lobbyTypes[lobbyType] === undefined)
-    lobbyMessage = `LOBBY MATCH\n${tierOneID}${tierTwoID}`
-  else
-    lobbyMessage = lobbyTypes[lobbyType]
-	message = await Client
+	return await Client
     .channels
     .get(channelID)
-    .send(lobbyMessage,{ embed: lobbyEmbed })
-
-
-  // create reactions
-  await message.react('✅')
-  await message.react('1️⃣')
-	await message.react('2️⃣')
-	await message.react('3️⃣')
-	await message.react('4️⃣')
-	await message.react('5️⃣')
+    .send(lobbyMessage,{ embed: embedMessage })
 
   return 'lobby match posted to na-announcements\n'
 }
@@ -55,33 +26,64 @@ postAnnouncement = async (message, channelID) => {
 
 
 
-// create our lobby match announcement embed message
-const createLobbyEmbed = (date, time, timezone, userNickname, userIcon) => {
+createLobbyMessage = (message) => {
+
+  const lobbyType = CommandArgs[5] // command the user used either '', open or meme
+
+  const lobbyTypes = {
+    open: `OPEN LOBBY MATCH\n${TIER_ONE_ID}${TIER_TWO_ID}${TIER_THREE_ID}`,
+    meme: `🧐 MEME TEAM SATURDAY 🧐\n${TIER_ONE_ID}${TIER_TWO_ID}${TIER_THREE_ID}`,
+    normal: `LOBBY MATCH\n${TIER_ONE_ID}${TIER_TWO_ID}`
+  }
+
+  let lobbyMessage = ''
+
+  if (lobbyTypes[lobbyType] === undefined) // if user does not specify lobby type use normal
+    return lobbyTypes['normal']
+  
+  return lobbyMessage = lobbyTypes[lobbyType] // otherwise return specified lobby type
+}
+
+
+
+
+createEmbedMessage = (message) => {
+  const date = CommandArgs[2]
+  const time = CommandArgs[3]
+  const timezone = CommandArgs[4]
+  const userNickname  = getNickname(message)
+  const userIcon = message.author.avatarURL
+
+  return embedObject(date, time, timezone, userNickname, userIcon)
+}
+
+
+
+
+// create our lobby match embed object
+const embedObject = (date, time, timezone, userNickname, userIcon) => {
   return { 
       color: "10669055",
-      title: `NA Lobby Match ${date}`, // example: Saturday 3/15/20
-      description: `@ ${time} ${timezone}\n\nPosted By: ${userNickname}`, // 9:00pm America/New_York
-      thumbnail: {
-        url: `${userIcon}`
-      },
+      title: `🎟️     NA Lobby Match ${date}     🎟️`, // example: Saturday 3/15/20
+      description: `@ ${time} ${timezone}\n\nPosted By: ${userNickname}\n\n\n`, // 9:00pm America/New_York
       fields: [
         {
-          name: "**__Players Signed Up__**",
-          value: "Jane Doe\nJohn Smith\nBilly Ray\nJessica Rabbit\nJoe Rogers",
+          name: "**__Radiant__**",
+          value: "\u200b\n",
           inline: true
         },
         {
-          name: "\b",
-          value: "Jane Doe\nJohn Smith\nBilly Ray\nJessica Rabbit\nJoe Rogers",
+          name: "**__Dire__**",
+          value: "\n1. Dean Doe\n2. John Smith\n3. Billy Ray\n4. Jessica Rabbit\n5. Joe Rogers",
           inline: true
         },
         {
-          name: "\b",
-          value: "\b"
+          name: "\u200b",
+          value: "\u200b"
         },
         {
           name: "**__Waiting List__**",
-          value: "Jane Doe\nJohn Smith\nBilly Ray\nJessica Rabbit\nJoe Rogers",
+          value: "Wally Doe\nJohn Smith\nBilly Ray\nJessica Rabbit\nJoe Rogers",
           inline: true
         },
         {
@@ -91,42 +93,76 @@ const createLobbyEmbed = (date, time, timezone, userNickname, userIcon) => {
         }
       ],
       image: {
-      url: "https://seeklogo.com/images/D/dota-2-logo-556BDCC022-seeklogo.com.png"
+        url: "https://seeklogo.com/images/D/dota-2-logo-556BDCC022-seeklogo.com.png"
       },
       footer: {
-      text: "Smash the  ✅  if you would like to participate.\nPick any positions you are comfortable playing\nusing the reactions below"
+        text: "Smash the  ✅  if you would like to participate.\nPick any positions you are comfortable playing\nusing the reactions below"
     }
   }
 }
 
 
 
+
+createReactions = async (message) => {
+  await message.react('✅')
+  // await message.react('1️⃣')
+	// await message.react('2️⃣')
+	// await message.react('3️⃣')
+	// await message.react('4️⃣')
+	// await message.react('5️⃣')
+}
+
+
+
+
 // Listen for reaction add or remove events
 //-------------------------------------------------------------------------------------
-
-Client.on('messageReactionAdd', reactionMessage => {
-  const users = reactionMessage.users
-  const players = updatePlayers(users)
-})
-
-Client.on('messageReactionRemove', reactionMessage => {
-  console.log('reaction removed!')
-})
+Client.on('messageReactionAdd', (reactionMessage, user) => updateAnnouncementOnAdd(reactionMessage, user))
+Client.on('messageUpdate', (oldMessage, newMessage) => updateAnnouncementOnRemove(oldMessage, newMessage)) 
 
 
 
-// Create and update the players object
-//-------------------------------------------------------------------------------------
-updatePlayers = (users) => {
 
-  let players = {}
+updateAnnouncementOnAdd = async (reactionMessage, user) => {
+  let messageID = reactionMessage.message.id
+  
+  let channel = await Client.channels.get('680108846466859078')
+  let message = await channel.fetchMessage(messageID)
 
-  let username = ''
-  let role = ''
-  let position = ''
+  let radiantPlayers = message.embeds[0].fields[0].value
 
-  users.forEach((user) => {
+  
+  // update list with users username
+  embedMessage.fields[0].value = user.bot ? "\u200b" : user.username
 
-  })
 
+  embedMessage.title = "added"
+
+  reactionMessage.message.edit('added', {embed: embedMessage})
+  user.bot ? console.log('skipped bot\n') : console.log(`${user.username} added\n`)
+
+  return `${PURPLE}new list after user added:\n${WHITE}${radiantPlayers}`
+}
+
+
+
+
+updateAnnouncementOnRemove = async (oldMessage, newMessage) => {
+
+  console.log(newMessage)
+//   let messageID = reactionMessage.message.id
+  
+//   let channel = await Client.channels.get('680108846466859078')
+//   let message = await channel.fetchMessage(messageID)
+
+//   let radiantPlayers = message.embeds[0].fields[0].value
+
+//   embedMessage.fields[0].value = "\u200b"
+
+//   embedMessage.title = "removed"
+//   reactionMessage.message.edit('removed', {embed: embedMessage})
+//   console.log(`${reactionMessage.message.author.username} removed\n`)
+
+//  return `${PURPLE}new list after user removed:\n${WHITE}${radiantPlayers}`
 }

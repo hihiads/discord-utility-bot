@@ -8,12 +8,19 @@ const bots = {
 }
 
 
+
+
 // listen for messages on the server
 // when someone sends a bot command
 // run the route method
 Client.on('message', message => {
   if (notACommand(message)) // guard against normal messages on the server - helpers.js
     return
+
+  // Get the Guild which is populated after a message is received
+  // We will pass this around to our bots
+  Guild = Client.guilds.get(GUILD_ID)
+  CommandArgs = stringToArray(message)
   
   route(message) // send the message to our route function which delegates to the correct bot function
     .then(response => logSuccess(response))

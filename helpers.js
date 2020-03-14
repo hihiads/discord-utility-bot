@@ -2,7 +2,7 @@
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 WHITE='\033[1;37m'
-
+PURPLE='\033[0;35m'
 
 // log pretty error message
 logError = error =>
@@ -63,3 +63,5 @@ getRole = reactionMessage => reactionMessage
   .guild
   .roles
   .find(role => role.name === 'Coach') // if not found null
+
+
