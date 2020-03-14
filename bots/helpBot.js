@@ -10,9 +10,9 @@ helpBot = async (message) => {
 		footer: {
 			text: 'created by TheForce. Special Thanks to all the testers and devs <3'
 		},
-	};
+	}
 
-	await message.reply({ embed: helpMessage });
+	await message.reply({ embed: helpMessage })
 
 	return 'Help message sent\n'
 }

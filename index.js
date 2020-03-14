@@ -6,7 +6,7 @@ require('./helpers') // helper functions
 
 // load bots
 require('./bots/helpBot')
-
+require('./bots/scheduleBot')
 
 
 
