@@ -12,8 +12,7 @@ helpBot = async (message) => {
 		},
 	};
 
-	message.reply({ embed: helpMessage });
+	await message.reply({ embed: helpMessage });
 
-	return 'Success! Help message sent\n'
-
+	return 'Help message sent\n'
 }

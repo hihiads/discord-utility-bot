@@ -19,4 +19,10 @@ logError = error =>
 
 
 // log pretty success message
-logSuccess = message => console.log(`${GREEN}${message}`)
+logSuccess = message => console.log(`${GREEN}Success! ${WHITE}${message}`)
+
+
+getCommand = message => message
+  .content
+  .replace("!dfz ","")
+  .split(" ")[0]
