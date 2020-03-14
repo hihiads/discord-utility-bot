@@ -8,13 +8,13 @@ const bots = {
 
 
 // listen for messages on the server
-// when someone sends a message
+// when someone sends a bot command
 // run the route method
 Client.on('message', message => {
-  if (notACommand(message))
+  if (notACommand(message)) // guard against normal messages on the server
     return
-  else
-    route(message)
+  
+  route(message)
     .then(response => logSuccess(response))
     .catch(error => logError(error))
 })
@@ -24,6 +24,7 @@ Client.on('message', message => {
 // otherwise validate the users command
 // run the bot function associated with the command
 let command;
+
 
 const route = async message => {
   command = validateCommand(message)
