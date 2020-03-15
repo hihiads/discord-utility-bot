@@ -6,14 +6,14 @@ require('dotenv').config() // load environment variables into process.env
 //-------------------------------------------------------------------------------------
 Discord = require('discord.js') // Discord docs: https://bit.ly/39LYhac
 Client = new Discord.Client()
-GUILD_ID = "669667301632507916"
+GUILD_ID = "629298549976334337"
 PREFIX = "!dfz" // our command prefix
 
-TIER_ONE_ID = "<@&688842638421524486>"
-TIER_TWO_ID = "<@&688842668800999543>"
-TIER_THREE_ID = "<@&688842699092394025>"
+TIER_ONE_ID = "<@&629623752010891284>"
+TIER_TWO_ID = "<@&629623832990187520>"
+TIER_THREE_ID = "<@&629623895401562123>"
 
-NA_ANNOUNCEMENTS_ID = "679729898977624084"
+NA_ANNOUNCEMENTS_ID = "664758422155296770"
 LOBBY_POST_CONTENT = "Hey guys, we're hosting an NA Lobby Match"
 
 // embed indexes
