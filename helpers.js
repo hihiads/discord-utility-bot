@@ -61,12 +61,12 @@ stringToArray = message => message.content.split(" ")
 
 
 getNicknameFromUserID = async user_id => { 
-  let user = await Client.guilds.get(GUILD_ID).fetchMember(user_id)
+  let guildMember = await Client.guilds.get(GUILD_ID).fetchMember(user_id)
 
-  const nickname = user.nickname
+  const nickname = guildMember.nickname
 
   if (nickname === null)
-    return user.username
+    return guildMember.user.username
 
   return nickname 
 
