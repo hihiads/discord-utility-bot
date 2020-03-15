@@ -24,7 +24,7 @@ scheduleBot = async (message) => {
 
 postAnnouncement = async (message, channelID) => {
   const lobbyMessage = createLobbyMessage(message)
-  embedMessage = createEmbedMessage(message)
+  embedMessage = await createEmbedMessage(message)
   
 	return await Client
     .channels
@@ -45,11 +45,11 @@ createLobbyMessage = (message) => {
 
 
 
-createEmbedMessage = (message) => {
+createEmbedMessage = async (message) => {
+  const userNickname  = await getNicknameFromUserID(message.author.id)
   const date = CommandArgs[2]
   const time = CommandArgs[3]
   const timezone = CommandArgs[4]
-  const userNickname  = getNicknameFromUserID(message.author.id)
   const userIcon = message.author.avatarURL
   return embedObject(date, time, timezone, userNickname, userIcon)
 }
@@ -58,7 +58,7 @@ createEmbedMessage = (message) => {
 
 
 // create our lobby match embed object
-const embedObject = (date, time, timezone, userNickname, userIcon) => {
+embedObject = (date, time, timezone, userNickname, userIcon) => {
   return { 
       color: "10669055",
       title: `🎟️  NA Lobby Match ${date}  🎟️`,
@@ -167,6 +167,8 @@ addUserToLobbyPost = (userEmbedUpdateData, message, rawData) => {
 
   // combine radiant and dire
   // push user into first available spot
+  // split the arrays back into the proper embed fields
+  // joining them back into string with line breaks
 
   let bothTeams = userEmbedUpdateData
     .radiantPlayers
@@ -174,12 +176,11 @@ addUserToLobbyPost = (userEmbedUpdateData, message, rawData) => {
   
   let availableSlot = bothTeams.findIndex( (listItem) => listItem.length == 2)
 
-  //guard if not slots available
+  //guard if no slots available
   if (availableSlot == -1) return
 
   bothTeams[availableSlot] = `${bothTeams[availableSlot]} ${userEmbedUpdateData.nickname}`
 
-  console.log(bothTeams)
 
   // update embed which is outside of the function scope
   embedMessage.fields[RADIANT].value = bothTeams.slice(0,5).join("\n")
@@ -194,8 +195,30 @@ addUserToLobbyPost = (userEmbedUpdateData, message, rawData) => {
 
 removeUserFromLobbyPost = (userEmbedUpdateData, message, rawData) => {
 
-  //guard if they are already not in the embed
+  // guard if already not in the embed
   if (!userFoundInTheEmbed(userEmbedUpdateData)) return
+
+  // combine radiant and dire
+  // push user into first available spot
+  // split the arrays back into the proper embed fields
+  // joining them back into string with line breaks
+
+  let bothTeams = userEmbedUpdateData
+    .radiantPlayers
+    .concat(userEmbedUpdateData.direPlayers)
+
+  
+  let userSlot = bothTeams.findIndex( (listItem) => listItem.slice(3, listItem.length) == userEmbedUpdateData.nickname)
+
+  //guard if user not found
+  if (userSlot == -1) return
+
+  bothTeams[userSlot] = bothTeams[userSlot].slice(0, 2)
+
+
+  // update embed which is outside of the function scope
+  embedMessage.fields[RADIANT].value = bothTeams.slice(0,5).join("\n")
+  embedMessage.fields[DIRE].value = bothTeams.slice(5, bothTeams.length).join("\n")
 
   logSuccess('User removed from lobby post!')
 }
