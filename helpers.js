@@ -36,7 +36,7 @@ logError = error =>
 
 
 // log pretty success message
-logSuccess = message => console.log(`${GREEN}Success! ${WHITE}${message}`)
+logSuccess = message => console.log(`${GREEN}Success! ${WHITE}${message}\n`)
 
 
 // check if users message is a normal chat message not a bot command
@@ -58,18 +58,18 @@ getCommand = message => message
 stringToArray = message => message.content.split(" ")
 
 
-// get the users nickname
-getNickname = message => {
-  const nickname = message
-    .guild
-    .members
-    .get(message.author.id)
-    .nickname
+
+
+getNicknameFromUserID = async user_id => { 
+  let user = await Client.guilds.get(GUILD_ID).fetchMember(user_id)
+
+  const nickname = user.nickname
 
   if (nickname === null)
-    return message.author.username
+    return user.username
 
   return nickname 
+
 }
 
 
@@ -88,19 +88,62 @@ getLobbyType = (command, lobbyTypes) => command === undefined ? lobbyTypes['norm
 
 
 
-getMessagebyID = async (response) => {
-  const channel = await Client.channels.get('680108846466859078')
-  const message = await channel.messages.get(response.d.message_id)
-  return message
+getMessagebyID = async message_id => {
+  try{
+    const channel = Client.channels.get('680108846466859078')
+    const messages = await channel.fetchMessages({limit: 15})
+    return messages.get(message_id) === undefined ? `\n${PURPLE}Message too old to update\n` : messages.get(message_id)
+  } catch(error) {
+    logError(error)
+  }
 }
 
 
 
-notValidLobbyPost = async (message) =>{
+notValidLobbyPost = async message => {
   if (message.content.split('\n')[0] == LOBBY_POST_CONTENT && message.author.username.split(" ")[0] == "DotaFromZero"){
     return false
   }
 
   return true
+}
 
+
+
+
+getEmbedFields = message => message.embeds[0].fields // returns array
+
+
+
+
+// create an object that holds all the values we need to update the embed message
+getUpdateData = async (user, message, userEmbedUpdateData) => {
+
+  userEmbedUpdateData.nickname = await getNicknameFromUserID(user.id)
+  
+  fields = getEmbedFields(message)
+  
+  userEmbedUpdateData.radiantPlayers = fields[RADIANT].value.split('\n')
+  userEmbedUpdateData.direPlayers = fields[DIRE].value.split('\n')
+  userEmbedUpdateData.waitingList = fields[WAITINGLIST].value.split('\n')
+  userEmbedUpdateData.coaches = fields[COACHES].value.split('\n')
+
+
+  return userEmbedUpdateData
+}
+
+
+
+
+userFoundInTheEmbed = (userEmbedUpdateData) => {
+  // take all the fields and put them in one big array
+  const combinedEmbedList = userEmbedUpdateData
+    .radiantPlayers
+    .concat(userEmbedUpdateData.direPlayers)
+    .concat(userEmbedUpdateData.waitingList)
+    .concat(userEmbedUpdateData.coaches)
+    .map( (entry) => entry.substring(3, entry.length)) // strip away the number and period so only the name remains
+
+
+  return (combinedEmbedList.includes(userEmbedUpdateData.nickname))
 }
