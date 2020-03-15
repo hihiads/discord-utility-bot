@@ -10,6 +10,8 @@ let lobbyType,
 
 
 
+
+
 scheduleBot = async (message) => {
   lobbyType = getLobbyType(CommandArgs[5], lobbyTypes)
   announcementMessage = await postAnnouncement(message, NA_ANNOUNCEMENTS_ID)
@@ -47,7 +49,7 @@ createEmbedMessage = (message) => {
   const date = CommandArgs[2]
   const time = CommandArgs[3]
   const timezone = CommandArgs[4]
-  const userNickname  = getNickname(message)
+  const userNickname  = getNicknameFromUserID(message.author.id)
   const userIcon = message.author.avatarURL
   return embedObject(date, time, timezone, userNickname, userIcon)
 }
@@ -64,26 +66,26 @@ const embedObject = (date, time, timezone, userNickname, userIcon) => {
       fields: [
         {
           name: "**__Radiant__**",
-          value: "\u200b\n",
+          value: "1.\n2.\n3.\n4.\n5.\n",
           inline: true
         },
         {
           name: "**__Dire__**",
-          value: "\n1. Dean Doe\n2. John Smith\n3. Billy Ray\n4. Jessica Rabbit\n5. Joe Rogers",
+          value: "1.\n2.\n3.\n4.\n5.\n",
           inline: true
         },
         {
-          name: "\u200b",
-          value: "\u200b"
+          name: "\u200B", // this is here so the embed has a 2 column layout
+          value: "\u200B"
         },
         {
           name: "**__Waiting List__**",
-          value: "Wally Doe\nJohn Smith\nBilly Ray\nJessica Rabbit\nJoe Rogers",
+          value: "1.\n2.\n3.\n4.\n5.\n",
           inline: true
         },
         {
           name: "**__Coaches__** ",
-          value: "TheForce\nLucas\nMastic",
+          value: "1.\n2.\n3.\n4.\n5.\n",
           inline: true
         }
       ],
@@ -113,23 +115,87 @@ createReactions = async (message) => {
 
 // this is a patch due to a bug in discord on the messageReactionRemove event not working
 // https://github.com/discordjs/discord.js/issues/3941#event-3129973046
-Client.on('raw', (response) => {
+Client.on('raw', (rawData) => {
   // guard
-  if (!['MESSAGE_REACTION_ADD', 'MESSAGE_REACTION_REMOVE'].includes(response.t)) return
-  
-  updateAnnouncement(response)
+  if (!['MESSAGE_REACTION_ADD', 'MESSAGE_REACTION_REMOVE'].includes(rawData.t)) return
+  updateAnnouncement(rawData)
 })
 
 
 
 
-updateAnnouncement = async (response) => {
+updateAnnouncement = async (rawData) => {
 
-  const message = await getMessagebyID(response)
+  const message = await getMessagebyID(rawData.d.message_id)
 
-
+  // guard
   if(await notValidLobbyPost(message)) return
 
-  console.log(response)
+
+  const userAction = rawData.t
+  const user = await Client.fetchUser(rawData.d.user_id)
+
+  // guard if user is a bot
+  if(user.bot) return
+
+
+  // create user data object with everything we need
+  // to add or remove users from the embed
+  let userEmbedUpdateData = {}
+  userEmbedUpdateData = await getUpdateData(user, message, userEmbedUpdateData)
+
+
+  if (userAction == 'MESSAGE_REACTION_ADD')
+    await addUserToLobbyPost(userEmbedUpdateData, message, rawData)
+
+  if (userAction == 'MESSAGE_REACTION_REMOVE')
+    await removeUserFromLobbyPost(userEmbedUpdateData, message, rawData)
   
+
+  //update the message with the same content plus the new embed message
+  message.edit(message.content, {embed: embedMessage})
+
+}
+
+
+
+
+addUserToLobbyPost = (userEmbedUpdateData, message, rawData) => {
+
+  // guard if already in the embed
+  if (userFoundInTheEmbed(userEmbedUpdateData)) return
+
+  // combine radiant and dire
+  // push user into first available spot
+
+  let bothTeams = userEmbedUpdateData
+    .radiantPlayers
+    .concat(userEmbedUpdateData.direPlayers)
+  
+  let availableSlot = bothTeams.findIndex( (listItem) => listItem.length == 2)
+
+  //guard if not slots available
+  if (availableSlot == -1) return
+
+  bothTeams[availableSlot] = `${bothTeams[availableSlot]} ${userEmbedUpdateData.nickname}`
+
+  console.log(bothTeams)
+
+  // update embed which is outside of the function scope
+  embedMessage.fields[RADIANT].value = bothTeams.slice(0,5).join("\n")
+  embedMessage.fields[DIRE].value = bothTeams.slice(5, bothTeams.length).join("\n")
+
+  logSuccess('User added to lobby post!')
+}
+
+
+
+
+
+removeUserFromLobbyPost = (userEmbedUpdateData, message, rawData) => {
+
+  //guard if they are already not in the embed
+  if (!userFoundInTheEmbed(userEmbedUpdateData)) return
+
+  logSuccess('User removed from lobby post!')
 }
