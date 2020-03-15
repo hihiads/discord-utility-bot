@@ -1,8 +1,25 @@
+// validate user command message
+validateCommand = (message, bots) => {
+  if (message.author.bot) 
+    return
+  else // get only the command without prefix or options
+    command = getCommand(message) // helpers.js
+
+
+  if (bots[command] === undefined) // check if command invalid
+    throw Error('user did not enter a valid command')
+  
+  return command
+}
+
+
+
+
 // terminal colors to use in log messages
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 WHITE='\033[1;37m'
-
+PURPLE='\033[0;35m'
 
 // log pretty error message
 logError = error =>
@@ -63,3 +80,27 @@ getRole = reactionMessage => reactionMessage
   .guild
   .roles
   .find(role => role.name === 'Coach') // if not found null
+
+
+// get the lobby type to change the lobby message
+getLobbyType = (command, lobbyTypes) => command === undefined ? lobbyTypes['normal'] : lobbyTypes[command]
+
+
+
+
+getMessagebyID = async (response) => {
+  const channel = await Client.channels.get('680108846466859078')
+  const message = await channel.messages.get(response.d.message_id)
+  return message
+}
+
+
+
+notValidLobbyPost = async (message) =>{
+  if (message.content.split('\n')[0] == LOBBY_POST_CONTENT && message.author.username.split(" ")[0] == "DotaFromZero"){
+    return false
+  }
+
+  return true
+
+}
