@@ -1,3 +1,9 @@
+TIER_ONE_ID = process.env.TIER_ONE_ID
+TIER_TWO_ID = process.env.TIER_TWO_ID
+TIER_THREE_ID = process.env.TIER_THREE_ID
+
+
+
 const lobbyTypes = {
     open: `OPEN LOBBY MATCH\n${TIER_ONE_ID}${TIER_TWO_ID}${TIER_THREE_ID}`,
     meme: `MEME TEAM SATURDAY\n${TIER_ONE_ID}${TIER_TWO_ID}${TIER_THREE_ID}`,
@@ -14,7 +20,7 @@ let lobbyType,
 
 scheduleBot = async (message) => {
   lobbyType = getLobbyType(CommandArgs[5], lobbyTypes)
-  announcementMessage = await postAnnouncement(message, NA_ANNOUNCEMENTS_ID)
+  announcementMessage = await postAnnouncement(message, ANNOUNCEMENTS_ID)
   await createReactions(announcementMessage)
   return 'Lobby posted'
 }
