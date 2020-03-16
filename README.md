@@ -17,7 +17,9 @@ DISCORD_TOKEN='your bot token'
 GUILD_ID='server ID'
 
 TIER_ONE_ID='role ID'
+
 TIER_TWO_ID='role ID'
+
 TIER_THREE_ID='role ID'
 
 ANNOUNCEMENTS_ID='Channel ID'
