@@ -90,7 +90,7 @@ getLobbyType = (command, lobbyTypes) => command === undefined ? lobbyTypes['norm
 
 getMessagebyID = async message_id => {
   try{
-    const channel = Client.channels.get(NA_ANNOUNCEMENTS_ID)
+    const channel = Client.channels.get(ANNOUNCEMENTS_ID)
     const messages = await channel.fetchMessages({limit: 15})
     return messages.get(message_id) === undefined ? `\n${PURPLE}Message too old to update\n` : messages.get(message_id)
   } catch(error) {

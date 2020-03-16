@@ -1,16 +1,31 @@
 [![Run on Repl.it](https://repl.it/badge/github/sojohnnysaid/discord-utility-bot)](https://repl.it/github/sojohnnysaid/discord-utility-bot)
 
+
 ## getting started
-create a .env file with the following:
-
-DISCORD_TOKEN='your bot token'
-
-
-## get the bot running
 click the 'run on repl.it' badge in this readme at the top
 
 inside your repl IDE choose Node js and hit 'Done'
 
+create a .env file
+
+
+## how to run the repl
+open your blank .env file and add the following:
+
+DISCORD_TOKEN='your bot token'
+
+GUILD_ID='server ID'
+
+TIER_ONE_ID='role ID'
+
+TIER_TWO_ID='role ID'
+
+TIER_THREE_ID='role ID'
+
+ANNOUNCEMENTS_ID='Channel ID'
+
+
+## Final step
 click the run button
 
 that's it =)
