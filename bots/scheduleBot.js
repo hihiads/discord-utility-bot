@@ -144,6 +144,9 @@ updateAnnouncement = async (rawData) => {
   // guard if user is a bot
   if(user.bot) return
 
+  
+  // let test = await getGuildMemberFromUserID(rawData.d.user_id)
+  // console.log(test._roles)
 
   // create user data object with everything we need
   // to add or remove users from the embed
@@ -179,6 +182,7 @@ addUserToLobbyPost = (userEmbedUpdateData, message, rawData) => {
   let bothTeams = userEmbedUpdateData
     .radiantPlayers
     .concat(userEmbedUpdateData.direPlayers)
+    .concat(userEmbedUpdateData.waitingList)
   
   let availableSlot = bothTeams.findIndex( (listItem) => listItem.length == 2)
 
@@ -188,9 +192,14 @@ addUserToLobbyPost = (userEmbedUpdateData, message, rawData) => {
   bothTeams[availableSlot] = `${bothTeams[availableSlot]} ${userEmbedUpdateData.nickname}`
 
 
+
+  // recreate embed so we can then replace parts otherwise embed is undefined
+  embedMessage = getEmbedMessage(message.embeds[0])
+  
   // update embed which is outside of the function scope
   embedMessage.fields[RADIANT].value = bothTeams.slice(0,5).join("\n")
-  embedMessage.fields[DIRE].value = bothTeams.slice(5, bothTeams.length).join("\n")
+  embedMessage.fields[DIRE].value = bothTeams.slice(5, 10).join("\n")
+  embedMessage.fields[WAITINGLIST].value = bothTeams.slice(10, bothTeams.length).join("\n")
 
   logSuccess('User added to lobby post!')
 }
@@ -212,6 +221,7 @@ removeUserFromLobbyPost = (userEmbedUpdateData, message, rawData) => {
   let bothTeams = userEmbedUpdateData
     .radiantPlayers
     .concat(userEmbedUpdateData.direPlayers)
+    .concat(userEmbedUpdateData.waitingList)
 
   
   let userSlot = bothTeams.findIndex( (listItem) => listItem.slice(3, listItem.length) == userEmbedUpdateData.nickname)
@@ -222,9 +232,14 @@ removeUserFromLobbyPost = (userEmbedUpdateData, message, rawData) => {
   bothTeams[userSlot] = bothTeams[userSlot].slice(0, 2)
 
 
+  // recreate embed so we can then replace parts otherwise embed is undefined
+  embedMessage = getEmbedMessage(message.embeds[0])
+
+
   // update embed which is outside of the function scope
   embedMessage.fields[RADIANT].value = bothTeams.slice(0,5).join("\n")
-  embedMessage.fields[DIRE].value = bothTeams.slice(5, bothTeams.length).join("\n")
+  embedMessage.fields[DIRE].value = bothTeams.slice(5, 10).join("\n")
+  embedMessage.fields[WAITINGLIST].value = bothTeams.slice(10, bothTeams.length).join("\n")
 
   logSuccess('User removed from lobby post!')
 }

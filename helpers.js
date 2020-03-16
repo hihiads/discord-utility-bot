@@ -60,6 +60,10 @@ stringToArray = message => message.content.split(" ")
 
 
 
+getGuildMemberFromUserID = user_id => Client.guilds.get(GUILD_ID).fetchMember(user_id)
+
+
+
 getNicknameFromUserID = async user_id => { 
   let guildMember = await Client.guilds.get(GUILD_ID).fetchMember(user_id)
 
@@ -112,6 +116,29 @@ notValidLobbyPost = async message => {
 
 
 getEmbedFields = message => message.embeds[0].fields // returns array
+
+
+
+
+getEmbedMessage = (embed) => {
+
+  let temp = {
+    color: embed.color,
+    title: embed.title,
+    description: embed.description,
+    fields: [
+      {name: embed.fields[0].name, value: "1.\n2.\n3.\n4.\n5.\n", inline: embed.fields[0].inline},
+      {name: embed.fields[1].name, value: "1.\n2.\n3.\n4.\n5.\n", inline: embed.fields[1].inline},
+      {name: embed.fields[2].name, value: embed.fields[2].value, inline: embed.fields[2].inline},
+      {name: embed.fields[3].name, value: "1.\n2.\n3.\n4.\n5.\n", inline: embed.fields[3].inline},
+      {name: embed.fields[4].name, value: "1.\n2.\n3.\n4.\n5.\n", inline: embed.fields[4].inline}
+    ],
+    image: {url: embed.image.url},
+    footer: {text: embed.footer.text}
+  }
+
+  return temp
+}
 
 
 
