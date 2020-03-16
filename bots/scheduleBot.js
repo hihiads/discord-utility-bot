@@ -5,9 +5,9 @@ TIER_THREE_ID = process.env.TIER_THREE_ID
 
 
 const lobbyTypes = {
-    open: `OPEN LOBBY MATCH\n${TIER_ONE_ID}${TIER_TWO_ID}${TIER_THREE_ID}`,
-    meme: `MEME TEAM SATURDAY\n${TIER_ONE_ID}${TIER_TWO_ID}${TIER_THREE_ID}`,
-    normal: `LOBBY MATCH\n${TIER_ONE_ID}${TIER_TWO_ID}`
+    open: `OPEN LOBBY MATCH\n<@&${TIER_ONE_ID}><@&${TIER_TWO_ID}><@&${TIER_THREE_ID}>`,
+    meme: `MEME TEAM SATURDAY\n<@&${TIER_ONE_ID}><@&${TIER_TWO_ID}><@&${TIER_THREE_ID}>`,
+    normal: `LOBBY MATCH\n<@&${TIER_ONE_ID}><@&${TIER_TWO_ID}>`
   }
 
 let lobbyType, 
