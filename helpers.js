@@ -42,7 +42,7 @@ notACommand = message => {
 // remove prefix and options leaving only the bot command
 getCommand = message => message
   .content
-  .replace("!dfz ","")
+  .replace(`${PREFIX} ` || "!dfz ","")
   .split(" ")[0]
 
 // access each argument in bot command as array index
