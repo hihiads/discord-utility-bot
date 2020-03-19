@@ -25,6 +25,7 @@ TIER_THREE_ID='role ID'
 ANNOUNCEMENTS_ID='Channel ID'
 
 If you want to use custom commands prefix (not !dfz): BOT_COMMANDS_PREFIX='new_prefix'
+
 If you want to use custom guild name not 'DotaFromZero' set GUILD_NAME var eg GUILD_NAME='my_guild_name'
 
 ## Final step
