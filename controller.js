@@ -4,11 +4,8 @@ const bots = {
   lobby: scheduleBot
 }
 
-
-
 // listen for incomming messages
 Client.on('message', message => {
-  
   // guard
   if (notACommand(message)) return
 
@@ -20,10 +17,7 @@ Client.on('message', message => {
     .catch(error => logError(error))
 })
 
-
-let command, messageArray
-
 const route = async message => {
-  command = validateCommand(message, bots)
+  const command = validateCommand(message, bots)
   return bots[command](message)
 }
