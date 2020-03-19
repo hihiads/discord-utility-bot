@@ -7,7 +7,7 @@ require('dotenv').config() // load environment variables into process.env
 Discord = require('discord.js') // Discord docs: https://bit.ly/39LYhac
 Client = new Discord.Client()
 
-PREFIX = proces.env.BOT_COMMANDS_PREFIX || '!dfz' // our command prefix
+PREFIX = process.env.BOT_COMMANDS_PREFIX || '!dfz' // our command prefix
 
 GUILD_ID = process.env.GUILD_ID
 
