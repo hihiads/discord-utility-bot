@@ -109,11 +109,11 @@ embedObject = (date, time, timezone, userNickname, userIcon) => {
 
 createReactions = async (message) => {
   await message.react('✅')
-  // await message.react('1️⃣')
-	// await message.react('2️⃣')
-	// await message.react('3️⃣')
-	// await message.react('4️⃣')
-	// await message.react('5️⃣')
+  await message.react('1️⃣')
+	await message.react('2️⃣')
+	await message.react('3️⃣')
+	await message.react('4️⃣')
+	await message.react('5️⃣')
 }
 
 
@@ -131,7 +131,6 @@ Client.on('raw', (rawData) => {
 
 
 updateAnnouncement = async (rawData) => {
-
   const message = await getMessagebyID(rawData.d.message_id)
 
   // guard
