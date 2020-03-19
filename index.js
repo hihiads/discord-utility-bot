@@ -10,6 +10,7 @@ Client = new Discord.Client()
 PREFIX = process.env.BOT_COMMANDS_PREFIX || '!dfz' // our command prefix
 
 GUILD_ID = process.env.GUILD_ID
+GUILD_NAME = process.env.GUILD_NAME || 'DotaFromZero'
 
 TIER_ONE_ID = process.env.TIER_ONE_ID
 TIER_TWO_ID = process.env.TIER_TWO_ID
@@ -41,7 +42,7 @@ require('./bots/scheduleBot')
 
 // START ENTRY POINT
 //-------------------------------------------------------------------------------------
-// login to the DotaFromZero Discord as the bot
+// login to the Discord as the bot
 // login method returns a promise so we can use .then and .catch
 Client.login(process.env.DISCORD_TOKEN)
   .then(
