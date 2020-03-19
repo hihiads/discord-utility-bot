@@ -10,13 +10,7 @@ const lobbyTypes = {
     normal: `LOBBY MATCH\n<@&${TIER_ONE_ID}><@&${TIER_TWO_ID}>`
   }
 
-let lobbyType, 
-  embedMessage, 
-  eventName
-
-
-
-
+let lobbyType, embedMessage, eventName
 
 scheduleBot = async (message) => {
   lobbyType = getLobbyType(CommandArgs[5], lobbyTypes)
@@ -24,9 +18,6 @@ scheduleBot = async (message) => {
   await createReactions(announcementMessage)
   return 'Lobby posted'
 }
-
-
-
 
 postAnnouncement = async (message, channelID) => {
   const lobbyMessage = createLobbyMessage(message)
@@ -40,16 +31,10 @@ postAnnouncement = async (message, channelID) => {
   return 'lobby match posted to na-announcements\n'
 }
 
-
-
-
 createLobbyMessage = (message) => {
   const date = CommandArgs[2]
   return `Hey guys, we're hosting an NA Lobby Match\nPlease react if you would like to participate\n-------------------------------\n${lobbyType}\n`
 }
-
-
-
 
 createEmbedMessage = async (message) => {
   const userNickname  = await getNicknameFromUserID(message.author.id)
@@ -59,9 +44,6 @@ createEmbedMessage = async (message) => {
   const userIcon = message.author.avatarURL
   return embedObject(date, time, timezone, userNickname, userIcon)
 }
-
-
-
 
 // create our lobby match embed object
 embedObject = (date, time, timezone, userNickname, userIcon) => {
@@ -104,9 +86,6 @@ embedObject = (date, time, timezone, userNickname, userIcon) => {
   }
 }
 
-
-
-
 createReactions = async (message) => {
   await message.react('✅')
   await message.react('1️⃣')
@@ -116,9 +95,6 @@ createReactions = async (message) => {
 	await message.react('5️⃣')
 }
 
-
-
-
 // this is a patch due to a bug in discord on the messageReactionRemove event not working
 // https://github.com/discordjs/discord.js/issues/3941#event-3129973046
 Client.on('raw', (rawData) => {
@@ -127,23 +103,16 @@ Client.on('raw', (rawData) => {
   updateAnnouncement(rawData)
 })
 
-
-
-
 updateAnnouncement = async (rawData) => {
   const message = await getMessagebyID(rawData.d.message_id)
-
   // guard
   if(await notValidLobbyPost(message)) return
 
-
   const userAction = rawData.t
   const user = await Client.fetchUser(rawData.d.user_id)
-
   // guard if user is a bot
   if(user.bot) return
 
-  
   // let test = await getGuildMemberFromUserID(rawData.d.user_id)
   // console.log(test._roles)
 
@@ -152,24 +121,17 @@ updateAnnouncement = async (rawData) => {
   let userEmbedUpdateData = {}
   userEmbedUpdateData = await getUpdateData(user, message, userEmbedUpdateData)
 
-
   if (userAction == 'MESSAGE_REACTION_ADD')
     await addUserToLobbyPost(userEmbedUpdateData, message, rawData)
 
   if (userAction == 'MESSAGE_REACTION_REMOVE')
     await removeUserFromLobbyPost(userEmbedUpdateData, message, rawData)
   
-
   //update the message with the same content plus the new embed message
   message.edit(message.content, {embed: embedMessage})
-
 }
 
-
-
-
 addUserToLobbyPost = (userEmbedUpdateData, message, rawData) => {
-
   // guard if already in the embed
   if (userFoundInTheEmbed(userEmbedUpdateData)) return
 
@@ -190,8 +152,6 @@ addUserToLobbyPost = (userEmbedUpdateData, message, rawData) => {
 
   bothTeams[availableSlot] = `${bothTeams[availableSlot]} ${userEmbedUpdateData.nickname}`
 
-
-
   // recreate embed so we can then replace parts otherwise embed is undefined
   embedMessage = getEmbedMessage(message.embeds[0])
   
@@ -202,10 +162,6 @@ addUserToLobbyPost = (userEmbedUpdateData, message, rawData) => {
 
   logSuccess('User added to lobby post!')
 }
-
-
-
-
 
 removeUserFromLobbyPost = (userEmbedUpdateData, message, rawData) => {
 
@@ -221,7 +177,6 @@ removeUserFromLobbyPost = (userEmbedUpdateData, message, rawData) => {
     .radiantPlayers
     .concat(userEmbedUpdateData.direPlayers)
     .concat(userEmbedUpdateData.waitingList)
-
   
   let userSlot = bothTeams.findIndex( (listItem) => listItem.slice(3, listItem.length) == userEmbedUpdateData.nickname)
 
@@ -230,10 +185,8 @@ removeUserFromLobbyPost = (userEmbedUpdateData, message, rawData) => {
 
   bothTeams[userSlot] = bothTeams[userSlot].slice(0, 2)
 
-
   // recreate embed so we can then replace parts otherwise embed is undefined
   embedMessage = getEmbedMessage(message.embeds[0])
-
 
   // update embed which is outside of the function scope
   embedMessage.fields[RADIANT].value = bothTeams.slice(0,5).join("\n")
