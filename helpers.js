@@ -35,8 +35,8 @@ logSuccess = message => console.log(`${GREEN}Success! ${WHITE}${message}\n`)
 
 // check if users message is a normal chat message not a bot command
 notACommand = message => {
-    if (message.content.split(" ")[0] != PREFIX) // checks the first part of the message for !dfz
-      return true
+  if (message.content.split(" ")[0] != PREFIX) // checks the first part of the message for !dfz
+    return true
   }
 
 // remove prefix and options leaving only the bot command
@@ -51,15 +51,12 @@ stringToArray = message => message.content.split(" ")
 getGuildMemberFromUserID = user_id => Client.guilds.get(GUILD_ID).fetchMember(user_id)
 
 getNicknameFromUserID = async user_id => { 
-  let guildMember = await Client.guilds.get(GUILD_ID).fetchMember(user_id)
-
+  const guildMember = await Client.guilds.get(GUILD_ID).fetchMember(user_id)
   const nickname = guildMember.nickname
 
-  if (nickname === null)
-    return guildMember.user.username
+  if (nickname === null) return guildMember.user.username
 
-  return nickname 
-
+  return nickname
 }
 
 // get user's role
@@ -70,14 +67,13 @@ getRole = reactionMessage => reactionMessage
   .roles
   .find(role => role.name === 'Coach') // if not found null
 
-
 // get the lobby type to change the lobby message
 getLobbyType = (command, lobbyTypes) => command === undefined ? lobbyTypes['normal'] : lobbyTypes[command]
 
 getMessagebyID = async message_id => {
   try{
     const channel = Client.channels.get(ANNOUNCEMENTS_ID)
-    const messages = await channel.fetchMessages({limit: 15})
+    const messages = await channel.fetchMessages({ limit: 15 })
     return messages.get(message_id) === undefined ? `\n${PURPLE}Message too old to update\n` : messages.get(message_id)
   } catch(error) {
     logError(error)
@@ -85,7 +81,7 @@ getMessagebyID = async message_id => {
 }
 
 notValidLobbyPost = async message => {
-  if (message.content.split('\n')[0] == LOBBY_POST_CONTENT && message.author.username.split(" ")[0] == "DotaFromZero"){
+  if (message.content.split('\n')[0] == LOBBY_POST_CONTENT && message.author.username.split(" ")[0] === GUILD_NAME) {
     return false
   }
 
@@ -95,31 +91,27 @@ notValidLobbyPost = async message => {
 getEmbedFields = message => message.embeds[0].fields // returns array
 
 getEmbedMessage = (embed) => {
-
-  let temp = {
+  return {
     color: embed.color,
     title: embed.title,
     description: embed.description,
     fields: [
-      {name: embed.fields[0].name, value: "1.\n2.\n3.\n4.\n5.\n", inline: embed.fields[0].inline},
-      {name: embed.fields[1].name, value: "1.\n2.\n3.\n4.\n5.\n", inline: embed.fields[1].inline},
-      {name: embed.fields[2].name, value: embed.fields[2].value, inline: embed.fields[2].inline},
-      {name: embed.fields[3].name, value: "1.\n2.\n3.\n4.\n5.\n", inline: embed.fields[3].inline},
-      {name: embed.fields[4].name, value: "1.\n2.\n3.\n4.\n5.\n", inline: embed.fields[4].inline}
+      { name: embed.fields[0].name, value: "1.\n2.\n3.\n4.\n5.\n", inline: embed.fields[0].inline },
+      { name: embed.fields[1].name, value: "1.\n2.\n3.\n4.\n5.\n", inline: embed.fields[1].inline },
+      { name: embed.fields[2].name, value: embed.fields[2].value, inline: embed.fields[2].inline },
+      { name: embed.fields[3].name, value: "1.\n2.\n3.\n4.\n5.\n", inline: embed.fields[3].inline },
+      { name: embed.fields[4].name, value: "1.\n2.\n3.\n4.\n5.\n", inline: embed.fields[4].inline }
     ],
-    image: {url: embed.image.url},
-    footer: {text: embed.footer.text}
+    image: { url: embed.image.url },
+    footer: { text: embed.footer.text }
   }
-
-  return temp
 }
 
 // create an object that holds all the values we need to update the embed message
 getUpdateData = async (user, message, userEmbedUpdateData) => {
-
   userEmbedUpdateData.nickname = await getNicknameFromUserID(user.id)
   
-  fields = getEmbedFields(message)
+  const fields = getEmbedFields(message)
   
   userEmbedUpdateData.radiantPlayers = fields[RADIANT].value.split('\n')
   userEmbedUpdateData.direPlayers = fields[DIRE].value.split('\n')
